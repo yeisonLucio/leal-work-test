@@ -13,11 +13,9 @@ type CreateStoreUC struct {
 
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {
 	var minAmount valueobjects.Amount
-	if err := minAmount.NewFromString(createStoreDTO.MinAmount); err != nil {
-		return nil, err
-	}
+	minAmount.NewFromFloat(createStoreDTO.MinAmount)
 
-	storeDB, err := c.StoreRepository.Create(entities.Store{
+	createdStore, err := c.StoreRepository.Create(entities.Store{
 		Name:         createStoreDTO.Name,
 		Status:       valueobjects.ActiveStatus,
 		RewardPoints: createStoreDTO.RewardPoints,
@@ -30,9 +28,12 @@ func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCr
 	}
 
 	response := dto.StoreCreatedDTO{
-		ID:     storeDB.ID,
-		Name:   storeDB.Name,
-		Status: string(storeDB.Status),
+		ID:           createdStore.ID,
+		Name:         createdStore.Name,
+		RewardPoints: createdStore.RewardPoints,
+		RewardCoins:  createdStore.RewardCoins,
+		MinAmount:    createdStore.MinAmount.GetValue(),
+		Status:       string(createdStore.Status),
 	}
 
 	return &response, nil
