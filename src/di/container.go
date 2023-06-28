@@ -48,6 +48,7 @@ func BuildContainer() {
 
 	createRewardUC := &usecases.CreateRewardUC{
 		RewardRepository: rewardRepository,
+		StoreRepository:  storeRepository,
 	}
 
 	Container.RewardController = &controllers.RewardController{

@@ -7,38 +7,51 @@ import (
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
-type MysqlBranchRepository struct {
+type MysqlRewardRepository struct {
 	DB *gorm.DB
 }
 
-func (m *MysqlBranchRepository) Create(branch entities.Branch) (*entities.Branch, error) {
-	branchDB := models.Branch{
-		Name:    branch.Name,
-		Status:  string(branch.Status),
-		StoreID: branch.StoreID,
+func (m *MysqlRewardRepository) Create(reward entities.Reward) (*entities.Reward, error) {
+	rewardDB := models.Reward{
+		StoreID:     reward.StoreID,
+		Reward:      reward.Reward,
+		MinAmount:   reward.MinAmount.GetValue(),
+		Description: reward.Description,
+		AmountType:  reward.AmountType.GetValue(),
+		Status:      string(reward.Status),
 	}
 
-	if result := m.DB.Create(&branchDB); result.Error != nil {
+	if result := m.DB.Create(&rewardDB); result.Error != nil {
 		return nil, result.Error
 	}
 
-	branch.ID = branchDB.ID
+	reward.ID = rewardDB.ID
 
-	return &branch, nil
+	return &reward, nil
 }
 
-func (m *MysqlBranchRepository) FindByID(ID uint) (*entities.Branch, error) {
-	var branchDB models.Store
+func (m *MysqlRewardRepository) FindByID(ID uint) (*entities.Reward, error) {
+	var rewardDB models.Reward
 
-	if result := m.DB.Find(&branchDB, ID); result.Error != nil {
+	if result := m.DB.Find(&rewardDB, ID); result.Error != nil {
 		return nil, result.Error
 	}
 
-	branch := entities.Branch{
-		ID:     branchDB.ID,
-		Name:   branchDB.Name,
-		Status: valueobjects.Status(branchDB.Status),
+	var minAmount valueobjects.MinAmount
+	minAmount.NewFromFloat(rewardDB.MinAmount)
+
+	var amountType valueobjects.AmountType
+	amountType.New(rewardDB.AmountType)
+
+	reward := entities.Reward{
+		ID:          rewardDB.ID,
+		StoreID:     rewardDB.StoreID,
+		Reward:      rewardDB.Reward,
+		MinAmount:   minAmount,
+		Description: rewardDB.Description,
+		AmountType:  amountType,
+		Status:      valueobjects.Status(rewardDB.Status),
 	}
 
-	return &branch, nil
+	return &reward, nil
 }
