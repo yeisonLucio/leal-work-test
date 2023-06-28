@@ -1,7 +1,11 @@
 package models
 
+import "gorm.io/gorm"
+
 type Store struct {
-	ID     uint `gorm:"primaryKey;autoIncrement"`
-	Name   string
-	Status string `gorm:"enum('active','inactive');default:active"`
+	gorm.Model
+	Name     string `gorm:"not null"`
+	Status   string `gorm:"enum('active','inactive');default:active"`
+	Branches []Branch
+	Rewards  []Reward
 }
