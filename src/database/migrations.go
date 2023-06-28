@@ -8,9 +8,8 @@ func RunMigrations() error {
 		&models.Store{},
 		&models.Branch{},
 		&models.Campaign{},
-		&models.Purchase{},
+		&models.Transaction{},
 		&models.Reward{},
-		&models.UserReward{},
 	)
 
 }

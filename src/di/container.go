@@ -10,6 +10,7 @@ import (
 type Dependencies struct {
 	StoreController  *controllers.StoreController
 	BranchController *controllers.BranchController
+	RewardController *controllers.RewardController
 }
 
 var Container Dependencies
@@ -41,4 +42,15 @@ func BuildContainer() {
 		CreateBranchUC: createBranchUC,
 	}
 
+	rewardRepository := &repositories.MysqlRewardRepository{
+		DB: database.DB,
+	}
+
+	createRewardUC := &usecases.CreateRewardUC{
+		RewardRepository: rewardRepository,
+	}
+
+	Container.RewardController = &controllers.RewardController{
+		CreateRewardUC: createRewardUC,
+	}
 }

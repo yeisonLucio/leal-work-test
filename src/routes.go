@@ -17,6 +17,11 @@ func GetRoutes(app *gin.Engine) *gin.Engine {
 		{
 			branches.POST("/", di.Container.BranchController.Create)
 		}
+
+		rewards := api.Group("rewards")
+		{
+			rewards.POST("/", di.Container.RewardController.Create)
+		}
 	}
 
 	return app
