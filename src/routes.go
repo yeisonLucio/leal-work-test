@@ -6,11 +6,16 @@ import (
 )
 
 func GetRoutes(app *gin.Engine) *gin.Engine {
-	api := app.Group("api")
+	api := app.Group("api/v1")
 	{
 		stores := api.Group("stores")
 		{
-			stores.POST("/v1", di.Container.StoreController.Create)
+			stores.POST("/", di.Container.StoreController.Create)
+		}
+
+		branches := api.Group("branches")
+		{
+			branches.POST("/", di.Container.BranchController.Create)
 		}
 	}
 

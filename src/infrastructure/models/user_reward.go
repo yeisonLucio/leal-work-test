@@ -10,5 +10,5 @@ type UserReward struct {
 	Name       string `gorm:"not null"`
 	Points     uint
 	Coins      uint
-	Status     string `gorm:"enum('redeemed','available');default:available"`
+	Status     string `gorm:"type:enum('redeemed','available');default:available"`
 }

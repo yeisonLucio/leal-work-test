@@ -1,14 +1,9 @@
 package entities
 
-type Status string
-
-const (
-	ActiveStatus   Status = "active"
-	InactiveStatus Status = "inactive"
-)
+import "lucio.com/order-service/src/domain/valueobjects"
 
 type Store struct {
 	ID     uint
 	Name   string
-	Status Status
+	Status valueobjects.Status
 }

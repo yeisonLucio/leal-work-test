@@ -4,6 +4,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
+	"lucio.com/order-service/src/domain/valueobjects"
 )
 
 type CreateStoreUC struct {
@@ -13,7 +14,7 @@ type CreateStoreUC struct {
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {
 	storeDB, err := c.StoreRepository.Create(entities.Store{
 		Name:   createStoreDTO.Name,
-		Status: entities.ActiveStatus,
+		Status: valueobjects.ActiveStatus,
 	})
 
 	if err != nil {

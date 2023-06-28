@@ -8,7 +8,8 @@ import (
 )
 
 type Dependencies struct {
-	StoreController *controllers.StoreController
+	StoreController  *controllers.StoreController
+	BranchController *controllers.BranchController
 }
 
 var Container Dependencies
@@ -26,4 +27,18 @@ func BuildContainer() {
 	Container.StoreController = &controllers.StoreController{
 		CreateStoreUC: createStoreUC,
 	}
+
+	branchRepository := &repositories.MysqlBranchRepository{
+		DB: database.DB,
+	}
+
+	createBranchUC := &usecases.CreateBranchUC{
+		BranchRepository: branchRepository,
+		StoreRepository:  storeRepository,
+	}
+
+	Container.BranchController = &controllers.BranchController{
+		CreateBranchUC: createBranchUC,
+	}
+
 }

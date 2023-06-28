@@ -7,7 +7,7 @@ type Reward struct {
 	StoreID     uint    `gorm:"not null"`
 	Reward      uint    `gorm:"not null"`
 	MinPurchase float64 `gorm:"not null"`
-	Type        string  `gorm:"enum('coin','point');not null"`
-	Status      string  `gorm:"enum('active','inactive');default:active"`
+	Type        string  `gorm:"type:enum('coin','point');not null"`
+	Status      string  `gorm:"type:enum('active','inactive');default:active"`
 	UserRewards []UserReward
 }
