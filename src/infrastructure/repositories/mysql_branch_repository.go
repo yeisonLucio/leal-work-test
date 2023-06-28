@@ -28,7 +28,7 @@ func (m *MysqlBranchRepository) Create(branch entities.Branch) (*entities.Branch
 }
 
 func (m *MysqlBranchRepository) FindByID(ID uint) (*entities.Branch, error) {
-	var branchDB models.Store
+	var branchDB models.Branch
 
 	if result := m.DB.Find(&branchDB, ID); result.Error != nil {
 		return nil, result.Error

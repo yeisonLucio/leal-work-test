@@ -11,16 +11,21 @@ func GetRoutes(app *gin.Engine) *gin.Engine {
 		stores := api.Group("stores")
 		{
 			stores.POST("/", di.Container.StoreController.Create)
+			stores.POST("/:store_id/rewards", di.Container.RewardController.Create)
+			stores.POST("/:store_id/branches", di.Container.BranchController.Create)
 		}
 
-		branches := api.Group("branches")
+		campaigns := api.Group("campaigns")
 		{
-			branches.POST("/", di.Container.BranchController.Create)
+			campaigns.POST("/", di.Container.CampaignController.Create)
+			campaigns.POST("/:campaign_id/branches/:branchID")
+			campaigns.POST("/:campaign_id/stores/:store_id")
 		}
 
-		rewards := api.Group("rewards")
+		users := api.Group("users")
 		{
-			rewards.POST("/", di.Container.RewardController.Create)
+			users.POST("/")
+			users.POST("/:user_id/transactions")
 		}
 	}
 

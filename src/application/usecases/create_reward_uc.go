@@ -19,7 +19,7 @@ func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.Rewa
 		return nil, errors.New("la tienda ingresada no existe")
 	}
 
-	var minAmount valueobjects.MinAmount
+	var minAmount valueobjects.Amount
 	if err := minAmount.NewFromString(createRewardDTO.MinAmount); err != nil {
 		return nil, err
 	}

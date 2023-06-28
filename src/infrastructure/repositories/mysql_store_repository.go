@@ -13,8 +13,11 @@ type MysqlStoreRepository struct {
 
 func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, error) {
 	storeDB := models.Store{
-		Name:   store.Name,
-		Status: string(store.Status),
+		Name:         store.Name,
+		Status:       string(store.Status),
+		RewardPoints: store.RewardPoints,
+		RewardCoins:  store.RewardCoins,
+		MinAmount:    store.MinAmount.GetValue(),
 	}
 
 	if result := m.DB.Create(&storeDB); result.Error != nil {
@@ -33,10 +36,16 @@ func (m *MysqlStoreRepository) FindByID(ID uint) (*entities.Store, error) {
 		return nil, result.Error
 	}
 
+	var minAmount valueobjects.Amount
+	minAmount.NewFromFloat(storeDB.MinAmount)
+
 	store := entities.Store{
-		ID:     storeDB.ID,
-		Name:   storeDB.Name,
-		Status: valueobjects.Status(storeDB.Status),
+		ID:           storeDB.ID,
+		Name:         storeDB.Name,
+		RewardPoints: storeDB.RewardPoints,
+		RewardCoins:  storeDB.RewardCoins,
+		MinAmount:    minAmount,
+		Status:       valueobjects.Status(storeDB.Status),
 	}
 
 	return &store, nil

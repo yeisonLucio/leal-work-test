@@ -12,9 +12,17 @@ type CreateStoreUC struct {
 }
 
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {
+	var minAmount valueobjects.Amount
+	if err := minAmount.NewFromString(createStoreDTO.MinAmount); err != nil {
+		return nil, err
+	}
+
 	storeDB, err := c.StoreRepository.Create(entities.Store{
-		Name:   createStoreDTO.Name,
-		Status: valueobjects.ActiveStatus,
+		Name:         createStoreDTO.Name,
+		Status:       valueobjects.ActiveStatus,
+		RewardPoints: createStoreDTO.RewardPoints,
+		RewardCoins:  createStoreDTO.RewardCoins,
+		MinAmount:    minAmount,
 	})
 
 	if err != nil {

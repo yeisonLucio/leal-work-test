@@ -8,8 +8,7 @@ type Store struct {
 	Status       string `gorm:"type:enum('active','inactive');default:active"`
 	RewardPoints uint
 	RewardCoins  uint
-	PurchaseMin  float64
+	MinAmount    float64
 	Branches     []Branch
 	Rewards      []Reward
-	Transactions []Transaction
 }

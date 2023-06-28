@@ -8,9 +8,10 @@ import (
 )
 
 type Dependencies struct {
-	StoreController  *controllers.StoreController
-	BranchController *controllers.BranchController
-	RewardController *controllers.RewardController
+	StoreController    *controllers.StoreController
+	BranchController   *controllers.BranchController
+	RewardController   *controllers.RewardController
+	CampaignController *controllers.CampaignController
 }
 
 var Container Dependencies
@@ -53,5 +54,17 @@ func BuildContainer() {
 
 	Container.RewardController = &controllers.RewardController{
 		CreateRewardUC: createRewardUC,
+	}
+
+	campaignRepository := &repositories.MysqlCampaignRepository{
+		DB: database.DB,
+	}
+
+	createCampaignUC := &usecases.CreateCampaignUC{
+		CampaignRepository: campaignRepository,
+	}
+
+	Container.CampaignController = &controllers.CampaignController{
+		CreateCampaignUC: createCampaignUC,
 	}
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"lucio.com/order-service/src/domain/contracts/usecases"
@@ -22,6 +23,26 @@ func (s *RewardController) Create(ctx *gin.Context) {
 		})
 		return
 	}
+
+	param, found := ctx.Params.Get("store_id")
+	if !found {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro store_id es requerido",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	storeID, err := strconv.Atoi(param)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro store_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	createRewardDTO.StoreID = uint(storeID)
 
 	rewardCreated, err := s.CreateRewardUC.Execute(createRewardDTO)
 	if err != nil {

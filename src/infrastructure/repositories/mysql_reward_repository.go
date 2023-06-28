@@ -37,7 +37,7 @@ func (m *MysqlRewardRepository) FindByID(ID uint) (*entities.Reward, error) {
 		return nil, result.Error
 	}
 
-	var minAmount valueobjects.MinAmount
+	var minAmount valueobjects.Amount
 	minAmount.NewFromFloat(rewardDB.MinAmount)
 
 	var amountType valueobjects.AmountType
