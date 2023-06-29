@@ -19,7 +19,16 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
       retries: 3
       timeout: 5s
+    
+  redis:
+    image: redis:alpine3.18
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    environment:
+      REDIS_PASSWORD: '${REDIS_PASSWORD}'
+    volumes:
+      - 'redis-db:/data'
 
 volumes:
   mysql-db:
-    driver: local
+  redis-db:

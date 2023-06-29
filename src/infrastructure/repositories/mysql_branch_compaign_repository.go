@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"gorm.io/gorm"
+	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
 	"lucio.com/order-service/src/domain/valueobjects"
 	"lucio.com/order-service/src/infrastructure/models"
@@ -58,4 +59,25 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) *entities.BranchCampai
 	}
 
 	return &branchCampaign
+}
+
+func (m *MysqlBranchCampaignRepository) FindByBranchID(
+	branchID uint,
+) []dto.BranchCampaignReportDTO {
+	var branchCampaigns []dto.BranchCampaignReportDTO
+
+	m.DB.Table("branch_campaigns bc").
+		Select(`bc.branch_id,
+			bc.campaign_id,
+			c.description,
+			bc.start_date,
+			bc.end_date,
+			bc.operator,
+			bc.operator_value,
+			bc.min_amount,
+			c.status`).
+		Joins("INNER JOIN campaigns c ON c.id=bc.campaign_id").
+		Where("branch_id", branchID).Find(&branchCampaigns).Scan(&branchCampaigns)
+
+	return branchCampaigns
 }

@@ -11,10 +11,6 @@ import (
 var DB *gorm.DB
 
 func Connect() (err error) {
-	if DB != nil {
-		return nil
-	}
-
 	url := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		os.Getenv("DB_USER"),
@@ -30,7 +26,7 @@ func Connect() (err error) {
 		return
 	}
 
-	fmt.Println("database connected")
+	fmt.Println("#### database connected ####")
 
 	return nil
 }

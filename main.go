@@ -22,6 +22,8 @@ func main() {
 		fmt.Println("error corriendo las migraciones")
 	}
 
+	database.ConnectRedis()
+
 	di.BuildContainer()
 
 	app := src.GetApp()

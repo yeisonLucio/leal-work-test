@@ -18,25 +18,13 @@ var Container Dependencies
 
 func BuildContainer() {
 
+	//repositories
 	storeRepository := &repositories.MysqlStoreRepository{
 		DB: database.DB,
 	}
 
-	createStoreUC := &usecases.CreateStoreUC{
-		StoreRepository: storeRepository,
-	}
-
-	Container.StoreController = &controllers.StoreController{
-		CreateStoreUC: createStoreUC,
-	}
-
 	branchRepository := &repositories.MysqlBranchRepository{
 		DB: database.DB,
-	}
-
-	createBranchUC := &usecases.CreateBranchUC{
-		BranchRepository: branchRepository,
-		StoreRepository:  storeRepository,
 	}
 
 	campaignRepository := &repositories.MysqlCampaignRepository{
@@ -45,6 +33,25 @@ func BuildContainer() {
 
 	branchCampaignRepository := &repositories.MysqlBranchCampaignRepository{
 		DB: database.DB,
+	}
+
+	rewardRepository := &repositories.MysqlRewardRepository{
+		DB: database.DB,
+	}
+
+	cacheRepository := &repositories.RedisRepository{
+		RedisClient: database.RedisClient,
+	}
+
+	//use cases
+
+	createStoreUC := &usecases.CreateStoreUC{
+		StoreRepository: storeRepository,
+	}
+
+	createBranchUC := &usecases.CreateBranchUC{
+		BranchRepository: branchRepository,
+		StoreRepository:  storeRepository,
 	}
 
 	createBranchCampaignUC := &usecases.CreateBranchCampaignUC{
@@ -60,31 +67,39 @@ func BuildContainer() {
 		StoreRepository:        storeRepository,
 	}
 
-	Container.BranchController = &controllers.BranchController{
-		CreateBranchUC:         createBranchUC,
-		CreateBranchCampaignUC: createBranchCampaignUC,
-		AddCampaignToStoreUC:   addCampaignToStoreUC,
-	}
-
-	rewardRepository := &repositories.MysqlRewardRepository{
-		DB: database.DB,
-	}
-
 	createRewardUC := &usecases.CreateRewardUC{
 		RewardRepository: rewardRepository,
 		StoreRepository:  storeRepository,
-	}
-
-	Container.RewardController = &controllers.RewardController{
-		CreateRewardUC: createRewardUC,
 	}
 
 	createCampaignUC := &usecases.CreateCampaignUC{
 		CampaignRepository: campaignRepository,
 	}
 
+	getBranchCampaignUC := &usecases.GetBranchCampaignsUC{
+		BranchCampaignRepository: branchCampaignRepository,
+		CacheRepository:          cacheRepository,
+	}
+
+	//controllers
+
+	Container.StoreController = &controllers.StoreController{
+		CreateStoreUC: createStoreUC,
+	}
+
+	Container.RewardController = &controllers.RewardController{
+		CreateRewardUC: createRewardUC,
+	}
+
 	Container.CampaignController = &controllers.CampaignController{
 		CreateCampaignUC: createCampaignUC,
+	}
+
+	Container.BranchController = &controllers.BranchController{
+		CreateBranchUC:         createBranchUC,
+		CreateBranchCampaignUC: createBranchCampaignUC,
+		AddCampaignToStoreUC:   addCampaignToStoreUC,
+		GetBranchCampaignsUC:   getBranchCampaignUC,
 	}
 
 }

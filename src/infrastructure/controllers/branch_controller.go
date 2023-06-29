@@ -13,6 +13,7 @@ type BranchController struct {
 	CreateBranchUC         usecases.CreateBranchUC
 	CreateBranchCampaignUC usecases.CreateBranchCampaignUC
 	AddCampaignToStoreUC   usecases.AddCampaignToStoreUC
+	GetBranchCampaignsUC   usecases.GetBranchCampaignsUC
 }
 
 func (b *BranchController) Create(ctx *gin.Context) {
@@ -156,6 +157,25 @@ func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 		})
 		return
 	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": result,
+	})
+}
+
+func (b *BranchController) GetBranchCampaignsByBranch(ctx *gin.Context) {
+	paramBranchID := ctx.Param("branch_id")
+
+	branchID, err := strconv.Atoi(paramBranchID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro branch_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	result := b.GetBranchCampaignsUC.Execute(uint(branchID))
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"data": result,
