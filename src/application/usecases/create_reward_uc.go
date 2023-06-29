@@ -20,9 +20,7 @@ func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.Rewa
 	}
 
 	var minAmount valueobjects.Amount
-	if err := minAmount.NewFromString(createRewardDTO.MinAmount); err != nil {
-		return nil, err
-	}
+	minAmount.NewFromFloat(createRewardDTO.MinAmount)
 
 	var amountType valueobjects.AmountType
 	if err := amountType.New(createRewardDTO.AmountType); err != nil {

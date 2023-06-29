@@ -35,3 +35,7 @@ func (s *CampaignController) Create(ctx *gin.Context) {
 		"data": campaignCreated,
 	})
 }
+
+func (s *CampaignController) AddCampaignToBranch(ctx *gin.Context) {
+
+}

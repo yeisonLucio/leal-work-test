@@ -21,7 +21,6 @@ func (b *BranchController) Create(ctx *gin.Context) {
 			"error": err.Error(),
 			"id":    "bad_request_error",
 		})
-
 		return
 	}
 
