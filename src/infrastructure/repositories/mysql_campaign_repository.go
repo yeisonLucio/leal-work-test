@@ -26,11 +26,11 @@ func (m *MysqlCampaignRepository) Create(Campaign entities.Campaign) (*entities.
 	return &Campaign, nil
 }
 
-func (m *MysqlCampaignRepository) FindByID(ID uint) (*entities.Campaign, error) {
+func (m *MysqlCampaignRepository) FindByID(ID uint) *entities.Campaign {
 	var campaignDB models.Campaign
 
-	if result := m.DB.Find(&campaignDB, ID); result.Error != nil {
-		return nil, result.Error
+	if result := m.DB.Find(&campaignDB, ID); result.RowsAffected == 0 {
+		return nil
 	}
 
 	Campaign := entities.Campaign{
@@ -39,5 +39,5 @@ func (m *MysqlCampaignRepository) FindByID(ID uint) (*entities.Campaign, error) 
 		Status:      valueobjects.Status(campaignDB.Status),
 	}
 
-	return &Campaign, nil
+	return &Campaign
 }

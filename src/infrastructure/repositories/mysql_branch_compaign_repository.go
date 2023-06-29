@@ -33,11 +33,11 @@ func (m *MysqlBranchCampaignRepository) Create(
 	return &branchCampaign, nil
 }
 
-func (m *MysqlBranchCampaignRepository) FindByID(ID uint) (*entities.BranchCampaign, error) {
+func (m *MysqlBranchCampaignRepository) FindByID(ID uint) *entities.BranchCampaign {
 	var branchDB models.BranchCampaign
 
-	if result := m.DB.Find(&branchDB, ID); result.Error != nil {
-		return nil, result.Error
+	if result := m.DB.Find(&branchDB, ID); result.RowsAffected == 0 {
+		return nil
 	}
 
 	var operator valueobjects.Operator
@@ -57,5 +57,5 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) (*entities.BranchCampa
 		MinAmount:      minAmount,
 	}
 
-	return &branchCampaign, nil
+	return &branchCampaign
 }

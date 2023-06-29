@@ -15,7 +15,7 @@ type CreateRewardUC struct {
 }
 
 func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.RewardCreatedDTO, error) {
-	if _, err := c.StoreRepository.FindByID(createRewardDTO.StoreID); err != nil {
+	if store := c.StoreRepository.FindByID(createRewardDTO.StoreID); store == nil {
 		return nil, errors.New("la tienda ingresada no existe")
 	}
 

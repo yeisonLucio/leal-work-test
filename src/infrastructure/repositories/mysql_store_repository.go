@@ -29,11 +29,11 @@ func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, er
 	return &store, nil
 }
 
-func (m *MysqlStoreRepository) FindByID(ID uint) (*entities.Store, error) {
+func (m *MysqlStoreRepository) FindByID(ID uint) *entities.Store {
 	var storeDB models.Store
 
-	if result := m.DB.Find(&storeDB, ID); result.Error != nil {
-		return nil, result.Error
+	if result := m.DB.Find(&storeDB, ID); result.RowsAffected == 0 {
+		return nil
 	}
 
 	var minAmount valueobjects.Amount
@@ -48,5 +48,5 @@ func (m *MysqlStoreRepository) FindByID(ID uint) (*entities.Store, error) {
 		Status:       valueobjects.Status(storeDB.Status),
 	}
 
-	return &store, nil
+	return &store
 }

@@ -20,12 +20,12 @@ func (c *CreateBranchCampaignUC) Execute(
 	createBranchCampaignDTO dto.CreateBranchCampaignDTO,
 ) (*dto.BranchCampaignCreatedDTO, error) {
 
-	if _, err := c.CampaignRepository.FindByID(createBranchCampaignDTO.CampaignID); err != nil {
-		return nil, errors.New("el campaign_id no existe")
+	if campaign := c.CampaignRepository.FindByID(createBranchCampaignDTO.CampaignID); campaign == nil {
+		return nil, errors.New("la campaña no existe")
 	}
 
-	if _, err := c.BranchRepository.FindByID(createBranchCampaignDTO.BranchID); err != nil {
-		return nil, errors.New("el branch_id no existe")
+	if branch := c.BranchRepository.FindByID(createBranchCampaignDTO.BranchID); branch == nil {
+		return nil, errors.New("la sucursal no existe")
 	}
 
 	startDate, err := time.Parse(time.DateTime, createBranchCampaignDTO.StartDate)

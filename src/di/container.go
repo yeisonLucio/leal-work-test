@@ -53,9 +53,17 @@ func BuildContainer() {
 		BranchCampaignRepository: branchCampaignRepository,
 	}
 
+	addCampaignToStoreUC := &usecases.AddCampaignToStoreUC{
+		BranchRepository:       branchRepository,
+		CreateBranchCampaignUC: createBranchCampaignUC,
+		CampaignRepository:     campaignRepository,
+		StoreRepository:        storeRepository,
+	}
+
 	Container.BranchController = &controllers.BranchController{
 		CreateBranchUC:         createBranchUC,
 		CreateBranchCampaignUC: createBranchCampaignUC,
+		AddCampaignToStoreUC:   addCampaignToStoreUC,
 	}
 
 	rewardRepository := &repositories.MysqlRewardRepository{

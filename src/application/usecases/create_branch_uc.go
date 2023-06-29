@@ -16,8 +16,8 @@ type CreateBranchUC struct {
 
 func (c *CreateBranchUC) Execute(createBranchDTO dto.CreateBranchDTO) (*dto.BranchCreatedDTO, error) {
 
-	if _, err := c.StoreRepository.FindByID(createBranchDTO.StoreID); err != nil {
-		return nil, errors.New("store id does not exists")
+	if store := c.StoreRepository.FindByID(createBranchDTO.StoreID); store == nil {
+		return nil, errors.New("la tienda no existe")
 	}
 
 	branch := entities.Branch{

@@ -22,10 +22,12 @@ func GetRoutes(app *gin.Engine) *gin.Engine {
 				"/:campaign_id/branches/:branch_id",
 				di.Container.BranchController.CreateBranchCampaign,
 			)
-			campaigns.POST("/:campaign_id/stores/:store_id")
+			campaigns.POST(
+				"/:campaign_id/stores/:store_id",
+				di.Container.BranchController.AddCampaignToBranches,
+			)
 			campaigns.GET("/:campaign_id/branches/:branch_id")
 			campaigns.GET("/:campaign_id/stores/:store_id")
-
 		}
 
 		users := api.Group("users")
