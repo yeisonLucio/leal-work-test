@@ -18,8 +18,14 @@ func GetRoutes(app *gin.Engine) *gin.Engine {
 		campaigns := api.Group("campaigns")
 		{
 			campaigns.POST("/", di.Container.CampaignController.Create)
-			campaigns.POST("/:campaign_id/branches/:branchID")
+			campaigns.POST(
+				"/:campaign_id/branches/:branch_id",
+				di.Container.BranchController.CreateBranchCampaign,
+			)
 			campaigns.POST("/:campaign_id/stores/:store_id")
+			campaigns.GET("/:campaign_id/branches/:branch_id")
+			campaigns.GET("/:campaign_id/stores/:store_id")
+
 		}
 
 		users := api.Group("users")

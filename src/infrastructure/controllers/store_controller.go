@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,8 +22,6 @@ func (s *StoreController) Create(ctx *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Print(createStoreDTO)
 
 	store, err := s.CreateStoreUC.Execute(createStoreDTO)
 	if err != nil {

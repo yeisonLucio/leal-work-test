@@ -40,7 +40,7 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) (*entities.BranchCampa
 		return nil, result.Error
 	}
 
-	var operator valueobjects.Operation
+	var operator valueobjects.Operator
 	operator.New(branchDB.Operator)
 
 	var minAmount valueobjects.Amount

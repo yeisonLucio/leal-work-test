@@ -39,8 +39,23 @@ func BuildContainer() {
 		StoreRepository:  storeRepository,
 	}
 
+	campaignRepository := &repositories.MysqlCampaignRepository{
+		DB: database.DB,
+	}
+
+	branchCampaignRepository := &repositories.MysqlBranchCampaignRepository{
+		DB: database.DB,
+	}
+
+	createBranchCampaignUC := &usecases.CreateBranchCampaignUC{
+		BranchRepository:         branchRepository,
+		CampaignRepository:       campaignRepository,
+		BranchCampaignRepository: branchCampaignRepository,
+	}
+
 	Container.BranchController = &controllers.BranchController{
-		CreateBranchUC: createBranchUC,
+		CreateBranchUC:         createBranchUC,
+		CreateBranchCampaignUC: createBranchCampaignUC,
 	}
 
 	rewardRepository := &repositories.MysqlRewardRepository{
@@ -56,10 +71,6 @@ func BuildContainer() {
 		CreateRewardUC: createRewardUC,
 	}
 
-	campaignRepository := &repositories.MysqlCampaignRepository{
-		DB: database.DB,
-	}
-
 	createCampaignUC := &usecases.CreateCampaignUC{
 		CampaignRepository: campaignRepository,
 	}
@@ -67,4 +78,5 @@ func BuildContainer() {
 	Container.CampaignController = &controllers.CampaignController{
 		CreateCampaignUC: createCampaignUC,
 	}
+
 }

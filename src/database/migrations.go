@@ -10,6 +10,7 @@ func RunMigrations() error {
 		&models.Campaign{},
 		&models.Transaction{},
 		&models.Reward{},
+		&models.BranchCampaign{},
 	)
 
 }

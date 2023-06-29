@@ -12,7 +12,7 @@ type BranchCampaign struct {
 	BranchID       uint
 	StartDate      time.Time
 	EndDate        time.Time
-	Operator       valueobjects.Operation
+	Operator       valueobjects.Operator
 	OperationValue uint
 	MinAmount      valueobjects.Amount
 }

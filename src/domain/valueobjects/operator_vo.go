@@ -6,13 +6,13 @@ import (
 	"lucio.com/order-service/src/domain/helpers"
 )
 
-type Operation struct {
+type Operator struct {
 	value string
 }
 
 var operatorTypes = []string{"%", "*"}
 
-func (v *Operation) New(value string) error {
+func (v *Operator) New(value string) error {
 	if !helpers.StringContains(operatorTypes, value) {
 		return errors.New("el operador ingresado no es valido")
 	}
@@ -22,6 +22,6 @@ func (v *Operation) New(value string) error {
 	return nil
 }
 
-func (v *Operation) GetValue() string {
+func (v *Operator) GetValue() string {
 	return v.value
 }

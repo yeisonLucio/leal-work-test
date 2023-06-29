@@ -10,7 +10,8 @@ import (
 )
 
 type BranchController struct {
-	CreateBranchUC usecases.CreateBranchUC
+	CreateBranchUC         usecases.CreateBranchUC
+	CreateBranchCampaignUC usecases.CreateBranchCampaignUC
 }
 
 func (b *BranchController) Create(ctx *gin.Context) {
@@ -56,4 +57,93 @@ func (b *BranchController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{
 		"data": branchCreated,
 	})
+}
+
+func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
+	var createBranchCampaignDTO dto.CreateBranchCampaignDTO
+
+	if err := ctx.ShouldBindJSON(&createBranchCampaignDTO); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"id":    "bad_request",
+		})
+		return
+	}
+
+	paramCampaignID := ctx.Param("campaign_id")
+
+	campaignID, err := strconv.Atoi(paramCampaignID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro campaign_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	createBranchCampaignDTO.CampaignID = uint(campaignID)
+
+	paramBranchID := ctx.Param("branch_id")
+
+	branchID, err := strconv.Atoi(paramBranchID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro branch_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	createBranchCampaignDTO.BranchID = uint(branchID)
+
+	result, err := b.CreateBranchCampaignUC.Execute(createBranchCampaignDTO)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"id":    "unexpected_error",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{
+		"data": result,
+	})
+}
+
+func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
+	var createStoreCampaignDTO dto.CreateStoreCampaignDTO
+
+	if err := ctx.ShouldBindJSON(&createStoreCampaignDTO); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"id":    "bad_request",
+		})
+		return
+	}
+
+	paramCampaignID := ctx.Param("campaign_id")
+
+	campaignID, err := strconv.Atoi(paramCampaignID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro campaign_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	createStoreCampaignDTO.CampaignID = uint(campaignID)
+
+	paramStoreID := ctx.Param("branch_id")
+
+	storeID, err := strconv.Atoi(paramStoreID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "el parámetro branch_id debe ser un un numero entero",
+			"id":    "bad_request_error",
+		})
+		return
+	}
+
+	createStoreCampaignDTO.StoreID = uint(storeID)
 }
