@@ -12,6 +12,7 @@ type Dependencies struct {
 	BranchController   *controllers.BranchController
 	RewardController   *controllers.RewardController
 	CampaignController *controllers.CampaignController
+	UserController     *controllers.UserController
 }
 
 var Container Dependencies
@@ -41,6 +42,10 @@ func BuildContainer() {
 
 	cacheRepository := &repositories.RedisRepository{
 		RedisClient: database.RedisClient,
+	}
+
+	userRepository := &repositories.MysqlUserRepository{
+		DB: database.DB,
 	}
 
 	//use cases
@@ -81,6 +86,10 @@ func BuildContainer() {
 		CacheRepository:          cacheRepository,
 	}
 
+	createUserUC := &usecases.CreateUserUC{
+		UserRepository: userRepository,
+	}
+
 	//controllers
 
 	Container.StoreController = &controllers.StoreController{
@@ -102,4 +111,7 @@ func BuildContainer() {
 		GetBranchCampaignsUC:   getBranchCampaignUC,
 	}
 
+	Container.UserController = &controllers.UserController{
+		CreateUserUC: createUserUC,
+	}
 }
