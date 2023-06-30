@@ -7,7 +7,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-const expiration = time.Minute * 30
+const expiration = time.Minute * 5
 
 var ctx = context.Background()
 
