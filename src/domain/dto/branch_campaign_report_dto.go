@@ -11,4 +11,4 @@ type BranchCampaignReportDTO struct {
 	Operator      string  `json:"operator"`
 	OperatorValue uint    `json:"operator_value"`
 	MinAmount     float64 `json:"min_amount"`
-}
+} // @name BranchCampaignReportResponse

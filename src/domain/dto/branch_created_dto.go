@@ -5,4 +5,4 @@ type BranchCreatedDTO struct {
 	Name    string `json:"name"`
 	Status  string `json:"status"`
 	StoreID uint   `json:"store_id"`
-}
+} // @name BranchResponse

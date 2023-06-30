@@ -5,4 +5,4 @@ type UserCreatedDTO struct {
 	Name           string `json:"name"`
 	Identification string `json:"identification"`
 	Status         string `json:"status"`
-}
+} // @name userResponse

@@ -14,6 +14,14 @@ type UserController struct {
 	CreateTransactionUC usecases.CreateTransactionUC
 }
 
+// @Summary Servicio para crear un usuario
+// @Description Permite crear una determinado usuario
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param body body dto.CreateUserDTO true "Body data"
+// @Success 200 {object} dto.UserCreatedDTO
+// @Router /users [post]
 func (u *UserController) Create(ctx *gin.Context) {
 	var createUserDTO dto.CreateUserDTO
 
@@ -38,6 +46,16 @@ func (u *UserController) Create(ctx *gin.Context) {
 	})
 }
 
+// @Summary Servicio para crear transacciones de un usuario
+// @Description Permite Registrar una transacción de un usuario en una sucursal
+// @Tags Users
+// @Accept json
+// @Produce json
+// @param user_id path int true "User ID"
+// @param branch_id path int true "Branch ID"
+// @Param body body dto.CreateTransactionDTO true "Body data"
+// @Success 200 {object} dto.TransactionCreatedDTO
+// @Router /users/{user_id}/transactions/branches/{branch_id} [post]
 func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 	var createTransactionDTO dto.CreateTransactionDTO
 

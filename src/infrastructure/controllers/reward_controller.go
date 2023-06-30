@@ -13,6 +13,15 @@ type RewardController struct {
 	CreateRewardUC usecases.CreateRewardUC
 }
 
+// @Summary Servicio para crear premios de una tienda
+// @Description Permite crear un premio para un comercio
+// @Tags Stores
+// @Accept json
+// @Produce json
+// @Param store_id path int true "Store ID"
+// @Param body body dto.CreateRewardDTO true "Body data"
+// @Success 200 {object} dto.RewardCreatedDTO
+// @Router /stores/{store_id}/rewards [post]
 func (s *RewardController) Create(ctx *gin.Context) {
 	var createRewardDTO dto.CreateRewardDTO
 

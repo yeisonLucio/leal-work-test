@@ -1,0 +1,452 @@
+definitions:
+  BranchCampaignReportResponse:
+    properties:
+      branch_id:
+        type: integer
+      campaign_id:
+        type: integer
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: integer
+      min_amount:
+        type: number
+      operator:
+        type: string
+      operator_value:
+        type: integer
+      start_date:
+        type: string
+      status:
+        type: string
+    type: object
+  BranchCampaignRequest:
+    properties:
+      end_date:
+        type: string
+      min_amount:
+        type: number
+      operator:
+        type: string
+      operator_value:
+        type: integer
+      start_date:
+        type: string
+    type: object
+  BranchCampaignResponse:
+    properties:
+      branch_id:
+        type: integer
+      campaign_id:
+        type: integer
+      end_date:
+        type: string
+      id:
+        type: integer
+      min_amount:
+        type: number
+      operator:
+        type: string
+      operator_value:
+        type: integer
+      start_date:
+        type: string
+    type: object
+  BranchResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+      store_id:
+        type: integer
+    type: object
+  UserRequest:
+    properties:
+      identification:
+        type: string
+      name:
+        type: string
+    type: object
+  branchRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  campaignRequest:
+    properties:
+      description:
+        type: string
+    type: object
+  campaignResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+    type: object
+  dto.ErroBranchCampaign:
+    properties:
+      branch_id:
+        type: integer
+      message:
+        type: string
+    type: object
+  rewardRequest:
+    properties:
+      amount_type:
+        type: string
+      description:
+        type: string
+      min_amount:
+        type: number
+      reward:
+        type: string
+    type: object
+  rewardResponse:
+    properties:
+      amount_type:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      min_amount:
+        type: number
+      reward:
+        type: string
+      status:
+        type: string
+      store_id:
+        type: integer
+    type: object
+  storeCampaignRequest:
+    properties:
+      end_date:
+        type: string
+      min_amount:
+        type: number
+      operator:
+        type: string
+      operator_value:
+        type: integer
+      start_date:
+        type: string
+    type: object
+  storeCampaignResponse:
+    properties:
+      branch_campaigns:
+        items:
+          $ref: '#/definitions/BranchCampaignResponse'
+        type: array
+      errors:
+        items:
+          $ref: '#/definitions/dto.ErroBranchCampaign'
+        type: array
+    type: object
+  storeRequest:
+    properties:
+      min_amount:
+        type: number
+      name:
+        type: string
+      reward_coins:
+        type: integer
+      reward_points:
+        type: integer
+    type: object
+  storeResponse:
+    properties:
+      id:
+        type: integer
+      min_amount:
+        type: number
+      name:
+        type: string
+      reward_coins:
+        type: integer
+      reward_points:
+        type: integer
+      status:
+        type: string
+    type: object
+  transactionRequest:
+    properties:
+      amount:
+        type: number
+    type: object
+  transactionResponse:
+    properties:
+      amount:
+        type: number
+      branch_id:
+        type: integer
+      coins:
+        type: integer
+      id:
+        type: integer
+      points:
+        type: integer
+      type:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  userResponse:
+    properties:
+      id:
+        type: integer
+      identification:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /campaigns:
+    post:
+      consumes:
+      - application/json
+      description: Permite crear una determinada campaña
+      parameters:
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/campaignRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/campaignResponse'
+      summary: Servicio para crear campañas
+      tags:
+      - Campaigns
+  /campaigns/{campaign_id}/branches/{branch_id}:
+    post:
+      consumes:
+      - application/json
+      description: Permite asociar una campaña a una sucursal especifica
+      parameters:
+      - description: Campaign ID
+        in: path
+        name: campaign_id
+        required: true
+        type: integer
+      - description: Branch ID
+        in: path
+        name: branch_id
+        required: true
+        type: integer
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/BranchCampaignRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/BranchCampaignResponse'
+      summary: Servicio para asociar una campaña a una sucursal
+      tags:
+      - Campaigns
+  /campaigns/{campaign_id}/stores/{store_id}:
+    post:
+      consumes:
+      - application/json
+      description: Permite asociar una campaña a todas las sucursales de una tienda
+      parameters:
+      - description: Campaign ID
+        in: path
+        name: campaign_id
+        required: true
+        type: integer
+      - description: Store ID
+        in: path
+        name: store_id
+        required: true
+        type: integer
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/storeCampaignRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storeCampaignResponse'
+      summary: Servicio para asociar una campaña a todas las sucursales de una tienda
+      tags:
+      - Campaigns
+  /campaigns/branches/{branch_id}:
+    get:
+      consumes:
+      - application/json
+      description: Permite obtener las campañas de una determinada sucursal
+      parameters:
+      - description: Branch ID
+        in: path
+        name: branch_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/BranchCampaignReportResponse'
+      summary: Servicio para obtener las campañas de una sucursal
+      tags:
+      - Campaigns
+  /stores:
+    post:
+      consumes:
+      - application/json
+      description: Permite crear una determinada tienda
+      parameters:
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/storeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storeResponse'
+      summary: Servicio para crear una tienda
+      tags:
+      - Stores
+  /stores/{store_id}/branches:
+    post:
+      consumes:
+      - application/json
+      description: Permite crear una determinada sucursal para una tienda
+      parameters:
+      - description: Store ID
+        in: path
+        name: store_id
+        required: true
+        type: integer
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/branchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/BranchResponse'
+      summary: Servicio para crear sucursales de una tienda
+      tags:
+      - Stores
+  /stores/{store_id}/rewards:
+    post:
+      consumes:
+      - application/json
+      description: Permite crear un premio para un comercio
+      parameters:
+      - description: Store ID
+        in: path
+        name: store_id
+        required: true
+        type: integer
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/rewardRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rewardResponse'
+      summary: Servicio para crear premios de una tienda
+      tags:
+      - Stores
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Permite crear una determinado usuario
+      parameters:
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userResponse'
+      summary: Servicio para crear un usuario
+      tags:
+      - Users
+  /users/{user_id}/transactions/branches/{branch_id}:
+    post:
+      consumes:
+      - application/json
+      description: Permite Registrar una transacción de un usuario en una sucursal
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Branch ID
+        in: path
+        name: branch_id
+        required: true
+        type: integer
+      - description: Body data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/transactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transactionResponse'
+      summary: Servicio para crear transacciones de un usuario
+      tags:
+      - Users
+swagger: "2.0"

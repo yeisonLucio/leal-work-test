@@ -8,4 +8,4 @@ type TransactionCreatedDTO struct {
 	Points   uint    `json:"points"`
 	Coins    uint    `json:"coins"`
 	Type     string  `json:"type"`
-}
+} // @name transactionResponse

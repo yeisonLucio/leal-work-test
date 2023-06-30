@@ -16,6 +16,15 @@ type BranchController struct {
 	GetBranchCampaignsUC   usecases.GetBranchCampaignsUC
 }
 
+// @Summary Servicio para crear sucursales de una tienda
+// @Description Permite crear una determinada sucursal para una tienda
+// @Tags Stores
+// @Accept json
+// @Produce json
+// @Param store_id path int true "Store ID"
+// @Param body body dto.CreateBranchDTO true "Body data"
+// @Success 200 {object} dto.BranchCreatedDTO
+// @Router /stores/{store_id}/branches [post]
 func (b *BranchController) Create(ctx *gin.Context) {
 	var createBranchDTO dto.CreateBranchDTO
 
@@ -61,6 +70,16 @@ func (b *BranchController) Create(ctx *gin.Context) {
 	})
 }
 
+// @Summary Servicio para asociar una campaña a una sucursal
+// @Description Permite asociar una campaña a una sucursal especifica
+// @Tags Campaigns
+// @Accept json
+// @Produce json
+// @Param campaign_id path int true "Campaign ID"
+// @Param branch_id path int true  "Branch ID"
+// @Param body body dto.CreateBranchCampaignDTO true "Body data"
+// @Success 200 {object} dto.BranchCampaignCreatedDTO
+// @Router /campaigns/{campaign_id}/branches/{branch_id} [post]
 func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
 	var createBranchCampaignDTO dto.CreateBranchCampaignDTO
 
@@ -112,6 +131,16 @@ func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
 	})
 }
 
+// @Summary Servicio para asociar una campaña a todas las sucursales de una tienda
+// @Description Permite asociar una campaña a todas las sucursales de una tienda
+// @Tags Campaigns
+// @Accept json
+// @Produce json
+// @Param campaign_id path int true "Campaign ID"
+// @Param store_id path int true "Store ID"
+// @Param body body dto.CreateStoreCampaignDTO true "Body data"
+// @Success 200 {object} dto.StoreCampaignCreatedDTO
+// @Router /campaigns/{campaign_id}/stores/{store_id} [post]
 func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 	var createStoreCampaignDTO dto.CreateStoreCampaignDTO
 
@@ -163,6 +192,14 @@ func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 	})
 }
 
+// @Summary Servicio para obtener las campañas de una sucursal
+// @Description Permite obtener las campañas de una determinada sucursal
+// @Tags Campaigns
+// @Accept json
+// @Produce json
+// @Param branch_id path int true "Branch ID"
+// @Success 200 {object} dto.BranchCampaignReportDTO
+// @Router /campaigns/branches/{branch_id} [get]
 func (b *BranchController) GetBranchCampaignsByBranch(ctx *gin.Context) {
 	paramBranchID := ctx.Param("branch_id")
 

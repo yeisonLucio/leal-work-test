@@ -12,6 +12,14 @@ type StoreController struct {
 	CreateStoreUC usecases.CreateStoreUC
 }
 
+// @Summary Servicio para crear una tienda
+// @Description Permite crear una determinada tienda
+// @Tags Stores
+// @Accept json
+// @Produce json
+// @Param body body dto.CreateStoreDTO true "Body data"
+// @Success 200 {object} dto.StoreCreatedDTO
+// @Router /stores [post]
 func (s *StoreController) Create(ctx *gin.Context) {
 	var createStoreDTO dto.CreateStoreDTO
 

@@ -7,4 +7,4 @@ type StoreCreatedDTO struct {
 	RewardCoins  uint    `json:"reward_coins"`
 	MinAmount    float64 `json:"min_amount"`
 	Status       string  `json:"status"`
-}
+} // @name storeResponse
