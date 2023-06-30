@@ -71,8 +71,8 @@ func (c *CreateTransactionUC) Execute(
 		rewardCoins += coins
 	}
 
-	transaction.Points = rewardPoints
-	transaction.Coins = rewardCoins
+	transaction.Points = store.RewardPoints + rewardPoints
+	transaction.Coins = store.RewardCoins + rewardCoins
 
 	transactionCreated, err := c.TransactionRepository.Create(transaction)
 	if err != nil {
@@ -80,6 +80,8 @@ func (c *CreateTransactionUC) Execute(
 	}
 
 	response.ID = transactionCreated.ID
+	response.Coins = transaction.Coins
+	response.Points = transaction.Points
 
 	return &response, nil
 }
@@ -91,15 +93,13 @@ func (c *CreateTransactionUC) calculateCampaignRewards(
 ) (uint, uint) {
 	switch campaign.Operator {
 	case "%":
-		addPoints := storePoints * campaign.OperatorValue / 100
-		storeCoins += addPoints
-
-		addCoins := storeCoins * campaign.OperatorValue / 100
-		storeCoins += addCoins
+		storePoints = (storePoints * campaign.OperatorValue) / 100
+		storeCoins = (storeCoins * campaign.OperatorValue) / 100
 
 	case "*":
-		storeCoins *= campaign.OperatorValue
-		storePoints *= campaign.OperatorValue
+		storeCoins = (storeCoins * campaign.OperatorValue) - storeCoins
+		storePoints *= (storePoints * campaign.OperatorValue) - storePoints
+
 	}
 
 	return storePoints, storeCoins

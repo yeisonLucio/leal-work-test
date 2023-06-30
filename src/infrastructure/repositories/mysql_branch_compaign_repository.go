@@ -21,7 +21,7 @@ func (m *MysqlBranchCampaignRepository) Create(
 		BranchID:      branchCampaign.BranchID,
 		CampaignID:    branchCampaign.CampaignID,
 		StartDate:     branchCampaign.StartDate,
-		EndDate:       branchCampaign.StartDate,
+		EndDate:       branchCampaign.EndDate,
 		Operator:      branchCampaign.Operator.GetValue(),
 		OperatorValue: branchCampaign.OperationValue,
 		MinAmount:     branchCampaign.MinAmount.GetValue(),
@@ -91,8 +91,9 @@ func (m *MysqlBranchCampaignRepository) GetActivesByBranchID(
 
 	now := time.Now().Format(time.DateTime)
 
-	m.DB.Where("branch_id", branchID).
-		Where("end_date < ?", now).
+	m.DB.Table("branch_campaigns").
+		Where("branch_id", branchID).
+		Where("end_date > ?", now).
 		Find(&branchCampaigns)
 
 	return branchCampaigns
