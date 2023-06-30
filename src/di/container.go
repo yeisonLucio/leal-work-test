@@ -48,6 +48,10 @@ func BuildContainer() {
 		DB: database.DB,
 	}
 
+	transactionRepository := &repositories.MysqlTransactionRepository{
+		DB: database.DB,
+	}
+
 	//use cases
 
 	createStoreUC := &usecases.CreateStoreUC{
@@ -90,6 +94,13 @@ func BuildContainer() {
 		UserRepository: userRepository,
 	}
 
+	createTransactionUC := &usecases.CreateTransactionUC{
+		StoreRepository:          storeRepository,
+		TransactionRepository:    transactionRepository,
+		UserRepository:           userRepository,
+		BranchCampaignRepository: branchCampaignRepository,
+	}
+
 	//controllers
 
 	Container.StoreController = &controllers.StoreController{
@@ -112,6 +123,7 @@ func BuildContainer() {
 	}
 
 	Container.UserController = &controllers.UserController{
-		CreateUserUC: createUserUC,
+		CreateUserUC:        createUserUC,
+		CreateTransactionUC: createTransactionUC,
 	}
 }

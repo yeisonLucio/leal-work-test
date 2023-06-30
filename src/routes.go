@@ -38,7 +38,10 @@ func GetRoutes(app *gin.Engine) *gin.Engine {
 		users := api.Group("users")
 		{
 			users.POST("/", di.Container.UserController.Create)
-			users.POST("/:user_id/transactions")
+			users.POST(
+				"/:user_id/transactions/branches/:branch_id",
+				di.Container.UserController.RegisterTransaction,
+			)
 		}
 	}
 

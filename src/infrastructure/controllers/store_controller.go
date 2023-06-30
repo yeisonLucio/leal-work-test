@@ -27,7 +27,7 @@ func (s *StoreController) Create(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
-			"id":    "create_store_error",
+			"id":    "unexpected_error",
 		})
 	}
 

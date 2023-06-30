@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -78,6 +80,20 @@ func (m *MysqlBranchCampaignRepository) FindByBranchID(
 			c.status`).
 		Joins("INNER JOIN campaigns c ON c.id=bc.campaign_id").
 		Where("branch_id", branchID).Find(&branchCampaigns).Scan(&branchCampaigns)
+
+	return branchCampaigns
+}
+
+func (m *MysqlBranchCampaignRepository) GetActivesByBranchID(
+	branchID uint,
+) []dto.BranchCampaignCreatedDTO {
+	var branchCampaigns []dto.BranchCampaignCreatedDTO
+
+	now := time.Now().Format(time.DateTime)
+
+	m.DB.Where("branch_id", branchID).
+		Where("end_date < ?", now).
+		Find(&branchCampaigns)
 
 	return branchCampaigns
 }

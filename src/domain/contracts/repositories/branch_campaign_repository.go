@@ -9,4 +9,5 @@ type BranchCampaignRepository interface {
 	Create(branchCampaign entities.BranchCampaign) (*entities.BranchCampaign, error)
 	FindByID(ID uint) *entities.BranchCampaign
 	FindByBranchID(branchID uint) []dto.BranchCampaignReportDTO
+	GetActivesByBranchID(branchID uint) []dto.BranchCampaignCreatedDTO
 }
