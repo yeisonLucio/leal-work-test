@@ -26,9 +26,10 @@ func (g *GetBranchCampaignsUC) Execute(branchID uint) []dto.BranchCampaignReport
 
 	branchCampaignsDTO = g.BranchCampaignRepository.FindByBranchID(branchID)
 
-	object, _ := json.Marshal(branchCampaignsDTO)
-
-	g.CacheRepository.SetByKey(key, string(object))
+	if len(branchCampaignsDTO) > 0 {
+		object, _ := json.Marshal(branchCampaignsDTO)
+		g.CacheRepository.SetByKey(key, string(object))
+	}
 
 	return branchCampaignsDTO
 }

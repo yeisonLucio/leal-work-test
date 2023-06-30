@@ -38,7 +38,7 @@ func TestCreateUserUC_Execute(t *testing.T) {
 				user := entities.User{
 					Status: valueobjects.ActiveStatus,
 				}
-				f.UserRepository.On("Create", user).Return(&user, errors.New("user create error"))
+				f.UserRepository.On("Create", user).Return(&user, errors.New("user create error")).Once()
 			},
 			want:    nil,
 			wantErr: true,
@@ -62,7 +62,7 @@ func TestCreateUserUC_Execute(t *testing.T) {
 				}
 				userResponse := user
 				userResponse.ID = 1
-				f.UserRepository.On("Create", user).Return(&userResponse, nil)
+				f.UserRepository.On("Create", user).Return(&userResponse, nil).Once()
 			},
 			want: &dto.UserCreatedDTO{
 				ID:             1,
