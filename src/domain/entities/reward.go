@@ -1,13 +1,13 @@
 package entities
 
-import "lucio.com/order-service/src/domain/valueobjects"
+import "lucio.com/order-service/src/domain/vo"
 
 type Reward struct {
 	ID          uint
 	Reward      string
 	Description string
-	MinAmount   valueobjects.Amount
-	AmountType  valueobjects.AmountType
+	MinAmount   vo.Amount
+	AmountType  vo.AmountType
 	StoreID     uint
-	Status      valueobjects.Status
+	Status      vo.Status
 }

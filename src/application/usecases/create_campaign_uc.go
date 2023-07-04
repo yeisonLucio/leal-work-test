@@ -4,7 +4,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateCampaignUC struct {
@@ -14,7 +14,7 @@ type CreateCampaignUC struct {
 func (c *CreateCampaignUC) Execute(createCampaignDTO dto.CreateCampaignDTO) (*dto.CampaignCreatedDTO, error) {
 	campaignDB, err := c.CampaignRepository.Create(entities.Campaign{
 		Description: createCampaignDTO.Description,
-		Status:      valueobjects.ActiveStatus,
+		Status:      vo.ActiveStatus,
 	})
 
 	if err != nil {

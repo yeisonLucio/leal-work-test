@@ -1,11 +1,9 @@
 package entities
 
-import (
-	"lucio.com/order-service/src/domain/valueobjects"
-)
+import "lucio.com/order-service/src/domain/vo"
 
 type Campaign struct {
 	ID          uint
 	Description string
-	Status      valueobjects.Status
+	Status      vo.Status
 }

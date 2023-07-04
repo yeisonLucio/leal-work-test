@@ -4,7 +4,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateUserUC struct {
@@ -15,7 +15,7 @@ func (c *CreateUserUC) Execute(createUserDTO dto.CreateUserDTO) (*dto.UserCreate
 	createdUser, err := c.UserRepository.Create(entities.User{
 		Name:           createUserDTO.Name,
 		Identification: createUserDTO.Identification,
-		Status:         valueobjects.ActiveStatus,
+		Status:         vo.ActiveStatus,
 	})
 
 	if err != nil {

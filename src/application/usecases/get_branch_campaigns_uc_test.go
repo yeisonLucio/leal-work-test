@@ -7,9 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
 	"lucio.com/order-service/src/domain/dto"
-	"lucio.com/order-service/src/domain/entities"
+	"lucio.com/order-service/src/mocks"
 )
 
 func TestGetBranchCampaignsUC_Execute(t *testing.T) {
@@ -31,8 +30,8 @@ func TestGetBranchCampaignsUC_Execute(t *testing.T) {
 	objectData, _ := json.Marshal(testData)
 
 	type fields struct {
-		BranchCampaignRepository *branchCampaignRepositoryMock
-		CacheRepository          *cacheRepositoryMock
+		BranchCampaignRepository *mocks.BranchCampaignRepository
+		CacheRepository          *mocks.CacheRepository
 	}
 	type args struct {
 		branchID uint
@@ -47,8 +46,8 @@ func TestGetBranchCampaignsUC_Execute(t *testing.T) {
 		{
 			name: "should return empty array from db",
 			fields: fields{
-				BranchCampaignRepository: &branchCampaignRepositoryMock{},
-				CacheRepository:          &cacheRepositoryMock{},
+				BranchCampaignRepository: &mocks.BranchCampaignRepository{},
+				CacheRepository:          &mocks.CacheRepository{},
 			},
 			args: args{
 				branchID: 1,
@@ -69,8 +68,8 @@ func TestGetBranchCampaignsUC_Execute(t *testing.T) {
 		{
 			name: "should return data from cache",
 			fields: fields{
-				BranchCampaignRepository: &branchCampaignRepositoryMock{},
-				CacheRepository:          &cacheRepositoryMock{},
+				BranchCampaignRepository: &mocks.BranchCampaignRepository{},
+				CacheRepository:          &mocks.CacheRepository{},
 			},
 			args: args{
 				branchID: 1,
@@ -96,42 +95,4 @@ func TestGetBranchCampaignsUC_Execute(t *testing.T) {
 			}
 		})
 	}
-}
-
-// mocks
-
-type branchCampaignRepositoryMock struct {
-	mock.Mock
-}
-
-func (m *branchCampaignRepositoryMock) Create(branchCampaign entities.BranchCampaign) (*entities.BranchCampaign, error) {
-	args := m.Called(branchCampaign)
-	return args.Get(0).(*entities.BranchCampaign), args.Error(1)
-}
-
-func (m *branchCampaignRepositoryMock) FindByID(ID uint) *entities.BranchCampaign {
-	args := m.Called(ID)
-	return args.Get(0).(*entities.BranchCampaign)
-}
-
-func (m *branchCampaignRepositoryMock) FindByBranchID(branchID uint) []dto.BranchCampaignReportDTO {
-	args := m.Called(branchID)
-	return args.Get(0).([]dto.BranchCampaignReportDTO)
-}
-
-func (m *branchCampaignRepositoryMock) GetActivesByBranchID(branchID uint) []dto.BranchCampaignCreatedDTO {
-	args := m.Called(branchID)
-	return args.Get(0).([]dto.BranchCampaignCreatedDTO)
-}
-
-type cacheRepositoryMock struct {
-	mock.Mock
-}
-
-func (m *cacheRepositoryMock) SetByKey(key string, object string) error {
-	return m.Called(key, object).Error(0)
-}
-func (m *cacheRepositoryMock) GetByKey(key string) (string, error) {
-	args := m.Called(key)
-	return args.Get(0).(string), args.Error(1)
 }

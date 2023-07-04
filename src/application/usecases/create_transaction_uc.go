@@ -4,53 +4,56 @@ import (
 	"errors"
 
 	"lucio.com/order-service/src/domain/contracts/repositories"
+	"lucio.com/order-service/src/domain/contracts/usecases"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
+)
+
+var (
+	errUserDoesNotExist           = errors.New("el usuario no existe")
+	errStoreDoesNotExist          = errors.New("no se encuentra tienda para la sucursal ingresada")
+	errTransactionCannotBeCreated = errors.New("la transacción no pudo ser creada")
 )
 
 type CreateTransactionUC struct {
-	StoreRepository          repositories.StoreRepository
-	TransactionRepository    repositories.TransactionRepository
-	UserRepository           repositories.UserRepository
-	BranchCampaignRepository repositories.BranchCampaignRepository
+	StoreRepository            repositories.StoreRepository
+	TransactionRepository      repositories.TransactionRepository
+	UserRepository             repositories.UserRepository
+	BranchCampaignRepository   repositories.BranchCampaignRepository
+	CalculateCampaignRewardsUC usecases.CalculateCampaignRewardsUC
 }
 
 func (c *CreateTransactionUC) Execute(
 	createTransactionUC dto.CreateTransactionDTO,
 ) (*dto.TransactionCreatedDTO, error) {
 	if c.UserRepository.FindByID(createTransactionUC.UserID) == nil {
-		return nil, errors.New("el usuario no existe")
+		return nil, errUserDoesNotExist
 	}
 
 	store := c.StoreRepository.FindByBranchID(createTransactionUC.BranchID)
 	if store == nil {
-		return nil, errors.New("no se encuentra tienda para la sucursal ingresada")
+		return nil, errStoreDoesNotExist
 	}
-
-	var amount valueobjects.Amount
-	amount.NewFromFloat(createTransactionUC.Amount)
 
 	transaction := entities.Transaction{
 		UserID:   createTransactionUC.UserID,
 		BranchID: createTransactionUC.BranchID,
-		Amount:   amount,
-		Type:     valueobjects.TransactionType(valueobjects.AddType),
+		Amount:   vo.NewAmountFromFloat(createTransactionUC.Amount),
+		Type:     vo.TransactionType(vo.AddType),
 	}
 
 	response := dto.TransactionCreatedDTO{
 		UserID:   transaction.UserID,
 		BranchID: transaction.BranchID,
-		Amount:   transaction.Amount.GetValue(),
+		Amount:   transaction.Amount.Value(),
 		Type:     string(transaction.Type),
 	}
 
-	campaigns := c.BranchCampaignRepository.GetActivesByBranchID(transaction.BranchID)
-
-	if createTransactionUC.Amount < store.MinAmount.GetValue() || len(campaigns) == 0 {
+	if createTransactionUC.Amount < store.MinAmount.Value() {
 		transactionCreated, err := c.TransactionRepository.Create(transaction)
 		if err != nil {
-			return nil, errors.New("la transacción no pudo ser creada")
+			return nil, errTransactionCannotBeCreated
 		}
 
 		response.ID = transactionCreated.ID
@@ -58,25 +61,18 @@ func (c *CreateTransactionUC) Execute(
 		return &response, nil
 	}
 
-	var rewardPoints, rewardCoins uint
+	points, coins := c.CalculateCampaignRewardsUC.Execute(
+		createTransactionUC.BranchID,
+		store.RewardPoints,
+		store.RewardCoins,
+	)
 
-	for _, campaign := range campaigns {
-		points, coins := c.calculateCampaignRewards(
-			campaign,
-			store.RewardPoints,
-			store.RewardCoins,
-		)
-
-		rewardPoints += points
-		rewardCoins += coins
-	}
-
-	transaction.Points = store.RewardPoints + rewardPoints
-	transaction.Coins = store.RewardCoins + rewardCoins
+	transaction.Points = store.RewardPoints + points
+	transaction.Coins = store.RewardCoins + coins
 
 	transactionCreated, err := c.TransactionRepository.Create(transaction)
 	if err != nil {
-		return nil, errors.New("la transacción no pudo ser creada")
+		return nil, errTransactionCannotBeCreated
 	}
 
 	response.ID = transactionCreated.ID
@@ -84,23 +80,4 @@ func (c *CreateTransactionUC) Execute(
 	response.Points = transaction.Points
 
 	return &response, nil
-}
-
-func (c *CreateTransactionUC) calculateCampaignRewards(
-	campaign dto.BranchCampaignCreatedDTO,
-	storePoints uint,
-	storeCoins uint,
-) (uint, uint) {
-	switch campaign.Operator {
-	case "%":
-		storePoints = (storePoints * campaign.OperatorValue) / 100
-		storeCoins = (storeCoins * campaign.OperatorValue) / 100
-
-	case "*":
-		storeCoins = (storeCoins * campaign.OperatorValue) - storeCoins
-		storePoints *= (storePoints * campaign.OperatorValue) - storePoints
-
-	}
-
-	return storePoints, storeCoins
 }

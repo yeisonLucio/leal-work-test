@@ -6,7 +6,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateBranchUC struct {
@@ -23,7 +23,7 @@ func (c *CreateBranchUC) Execute(createBranchDTO dto.CreateBranchDTO) (*dto.Bran
 	branch := entities.Branch{
 		Name:    createBranchDTO.Name,
 		StoreID: createBranchDTO.StoreID,
-		Status:  valueobjects.ActiveStatus,
+		Status:  vo.ActiveStatus,
 	}
 
 	branchCreated, err := c.BranchRepository.Create(branch)

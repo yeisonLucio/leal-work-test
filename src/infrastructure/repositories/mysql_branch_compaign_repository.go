@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
@@ -22,9 +22,9 @@ func (m *MysqlBranchCampaignRepository) Create(
 		CampaignID:    branchCampaign.CampaignID,
 		StartDate:     branchCampaign.StartDate,
 		EndDate:       branchCampaign.EndDate,
-		Operator:      branchCampaign.Operator.GetValue(),
+		Operator:      branchCampaign.Operator.Value(),
 		OperatorValue: branchCampaign.OperationValue,
-		MinAmount:     branchCampaign.MinAmount.GetValue(),
+		MinAmount:     branchCampaign.MinAmount.Value(),
 	}
 
 	if result := m.DB.Create(&branchDB); result.Error != nil {
@@ -43,11 +43,7 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) *entities.BranchCampai
 		return nil
 	}
 
-	var operator valueobjects.Operator
-	operator.New(branchDB.Operator)
-
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(branchDB.MinAmount)
+	operator, _ := vo.NewOperator(branchDB.Operator)
 
 	branchCampaign := entities.BranchCampaign{
 		ID:             branchDB.ID,
@@ -57,7 +53,7 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) *entities.BranchCampai
 		EndDate:        branchDB.EndDate,
 		Operator:       operator,
 		OperationValue: branchDB.OperatorValue,
-		MinAmount:      minAmount,
+		MinAmount:      vo.NewAmountFromFloat(branchDB.MinAmount),
 	}
 
 	return &branchCampaign

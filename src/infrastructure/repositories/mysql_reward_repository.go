@@ -3,7 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
@@ -15,9 +15,9 @@ func (m *MysqlRewardRepository) Create(reward entities.Reward) (*entities.Reward
 	rewardDB := models.Reward{
 		StoreID:     reward.StoreID,
 		Reward:      reward.Reward,
-		MinAmount:   reward.MinAmount.GetValue(),
+		MinAmount:   reward.MinAmount.Value(),
 		Description: reward.Description,
-		AmountType:  reward.AmountType.GetValue(),
+		AmountType:  reward.AmountType.Value(),
 		Status:      string(reward.Status),
 	}
 
@@ -37,20 +37,16 @@ func (m *MysqlRewardRepository) FindByID(ID uint) (*entities.Reward, error) {
 		return nil, result.Error
 	}
 
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(rewardDB.MinAmount)
-
-	var amountType valueobjects.AmountType
-	amountType.New(rewardDB.AmountType)
+	amountType, _ := vo.NewAmountType(rewardDB.AmountType)
 
 	reward := entities.Reward{
 		ID:          rewardDB.ID,
 		StoreID:     rewardDB.StoreID,
 		Reward:      rewardDB.Reward,
-		MinAmount:   minAmount,
+		MinAmount:   vo.NewAmountFromFloat(rewardDB.MinAmount),
 		Description: rewardDB.Description,
 		AmountType:  amountType,
-		Status:      valueobjects.Status(rewardDB.Status),
+		Status:      vo.Status(rewardDB.Status),
 	}
 
 	return &reward, nil

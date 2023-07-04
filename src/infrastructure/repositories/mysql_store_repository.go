@@ -3,7 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
@@ -17,7 +17,7 @@ func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, er
 		Status:       string(store.Status),
 		RewardPoints: store.RewardPoints,
 		RewardCoins:  store.RewardCoins,
-		MinAmount:    store.MinAmount.GetValue(),
+		MinAmount:    store.MinAmount.Value(),
 	}
 
 	if result := m.DB.Create(&storeDB); result.Error != nil {
@@ -36,16 +36,13 @@ func (m *MysqlStoreRepository) FindByID(ID uint) *entities.Store {
 		return nil
 	}
 
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(storeDB.MinAmount)
-
 	store := entities.Store{
 		ID:           storeDB.ID,
 		Name:         storeDB.Name,
 		RewardPoints: storeDB.RewardPoints,
 		RewardCoins:  storeDB.RewardCoins,
-		MinAmount:    minAmount,
-		Status:       valueobjects.Status(storeDB.Status),
+		MinAmount:    vo.NewAmountFromFloat(storeDB.MinAmount),
+		Status:       vo.Status(storeDB.Status),
 	}
 
 	return &store
@@ -64,16 +61,13 @@ func (m *MysqlStoreRepository) FindByBranchID(branchID uint) *entities.Store {
 		Where("b.id", branchID).
 		First(&storeDB)
 
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(storeDB.MinAmount)
-
 	store := entities.Store{
 		ID:           storeDB.ID,
 		Name:         storeDB.Name,
 		RewardPoints: storeDB.RewardPoints,
 		RewardCoins:  storeDB.RewardCoins,
-		MinAmount:    minAmount,
-		Status:       valueobjects.Status(storeDB.Status),
+		MinAmount:    vo.NewAmountFromFloat(storeDB.MinAmount),
+		Status:       vo.Status(storeDB.Status),
 	}
 
 	return &store

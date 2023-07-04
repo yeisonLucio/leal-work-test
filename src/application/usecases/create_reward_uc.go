@@ -6,7 +6,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateRewardUC struct {
@@ -19,21 +19,18 @@ func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.Rewa
 		return nil, errors.New("la tienda ingresada no existe")
 	}
 
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(createRewardDTO.MinAmount)
-
-	var amountType valueobjects.AmountType
-	if err := amountType.New(createRewardDTO.AmountType); err != nil {
+	amountType, err := vo.NewAmountType(createRewardDTO.AmountType)
+	if err != nil {
 		return nil, err
 	}
 
 	rewardDB, err := c.RewardRepository.Create(entities.Reward{
 		Reward:      createRewardDTO.Reward,
 		Description: createRewardDTO.Description,
-		MinAmount:   minAmount,
+		MinAmount:   vo.NewAmountFromFloat(createRewardDTO.MinAmount),
 		AmountType:  amountType,
 		StoreID:     createRewardDTO.StoreID,
-		Status:      valueobjects.ActiveStatus,
+		Status:      vo.ActiveStatus,
 	})
 
 	if err != nil {
@@ -44,8 +41,8 @@ func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.Rewa
 		ID:          rewardDB.ID,
 		Reward:      rewardDB.Reward,
 		Description: rewardDB.Description,
-		MinAmount:   rewardDB.MinAmount.GetValue(),
-		AmountType:  rewardDB.AmountType.GetValue(),
+		MinAmount:   rewardDB.MinAmount.Value(),
+		AmountType:  rewardDB.AmountType.Value(),
 		StoreID:     rewardDB.StoreID,
 		Status:      string(rewardDB.Status),
 	}

@@ -7,7 +7,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateBranchCampaignUC struct {
@@ -38,13 +38,10 @@ func (c *CreateBranchCampaignUC) Execute(
 		return nil, errors.New("el formato de end_date es incorrecto")
 	}
 
-	var operator valueobjects.Operator
-	if err := operator.New(createBranchCampaignDTO.Operator); err != nil {
+	operator, err := vo.NewOperator(createBranchCampaignDTO.Operator)
+	if err != nil {
 		return nil, err
 	}
-
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(createBranchCampaignDTO.MinAmount)
 
 	branchCampaign := entities.BranchCampaign{
 		CampaignID:     createBranchCampaignDTO.CampaignID,
@@ -53,7 +50,7 @@ func (c *CreateBranchCampaignUC) Execute(
 		EndDate:        endDate,
 		Operator:       operator,
 		OperationValue: createBranchCampaignDTO.OperatorValue,
-		MinAmount:      minAmount,
+		MinAmount:      vo.NewAmountFromFloat(createBranchCampaignDTO.MinAmount),
 	}
 
 	createdBranchCampaign, err := c.BranchCampaignRepository.Create(branchCampaign)
@@ -67,9 +64,9 @@ func (c *CreateBranchCampaignUC) Execute(
 		CampaignID:    createdBranchCampaign.CampaignID,
 		StartDate:     createdBranchCampaign.StartDate.String(),
 		EndDate:       createdBranchCampaign.EndDate.String(),
-		Operator:      createdBranchCampaign.Operator.GetValue(),
+		Operator:      createdBranchCampaign.Operator.Value(),
 		OperatorValue: createdBranchCampaign.OperationValue,
-		MinAmount:     createdBranchCampaign.MinAmount.GetValue(),
+		MinAmount:     createdBranchCampaign.MinAmount.Value(),
 	}
 
 	return &response, nil

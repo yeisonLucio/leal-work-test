@@ -16,7 +16,7 @@ func (m *MysqlTransactionRepository) Create(
 	transactionDB := models.Transaction{
 		UserID:   transaction.UserID,
 		BranchID: transaction.BranchID,
-		Amount:   transaction.Amount.GetValue(),
+		Amount:   transaction.Amount.Value(),
 		Points:   transaction.Points,
 		Coins:    transaction.Coins,
 		Type:     string(transaction.Type),

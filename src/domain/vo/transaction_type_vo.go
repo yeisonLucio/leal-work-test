@@ -1,4 +1,4 @@
-package valueobjects
+package vo
 
 type TransactionType string
 

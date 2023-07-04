@@ -3,7 +3,7 @@ package entities
 import (
 	"time"
 
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type BranchCampaign struct {
@@ -12,7 +12,7 @@ type BranchCampaign struct {
 	BranchID       uint
 	StartDate      time.Time
 	EndDate        time.Time
-	Operator       valueobjects.Operator
+	Operator       vo.Operator
 	OperationValue uint
-	MinAmount      valueobjects.Amount
+	MinAmount      vo.Amount
 }

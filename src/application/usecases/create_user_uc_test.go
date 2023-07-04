@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 func TestCreateUserUC_Execute(t *testing.T) {
@@ -36,7 +36,7 @@ func TestCreateUserUC_Execute(t *testing.T) {
 			},
 			mocker: func(a args, f fields) {
 				user := entities.User{
-					Status: valueobjects.ActiveStatus,
+					Status: vo.ActiveStatus,
 				}
 				f.UserRepository.On("Create", user).Return(&user, errors.New("user create error")).Once()
 			},
@@ -56,7 +56,7 @@ func TestCreateUserUC_Execute(t *testing.T) {
 			},
 			mocker: func(a args, f fields) {
 				user := entities.User{
-					Status:         valueobjects.ActiveStatus,
+					Status:         vo.ActiveStatus,
 					Name:           a.createUserDTO.Name,
 					Identification: a.createUserDTO.Identification,
 				}
@@ -68,7 +68,7 @@ func TestCreateUserUC_Execute(t *testing.T) {
 				ID:             1,
 				Name:           "test",
 				Identification: "123",
-				Status:         string(valueobjects.ActiveStatus),
+				Status:         string(vo.ActiveStatus),
 			},
 		},
 	}

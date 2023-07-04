@@ -1,13 +1,13 @@
 package entities
 
-import "lucio.com/order-service/src/domain/valueobjects"
+import "lucio.com/order-service/src/domain/vo"
 
 type Transaction struct {
 	ID       uint
 	UserID   uint
 	BranchID uint
-	Amount   valueobjects.Amount
+	Amount   vo.Amount
 	Points   uint
 	Coins    uint
-	Type     valueobjects.TransactionType
+	Type     vo.TransactionType
 }

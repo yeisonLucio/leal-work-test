@@ -3,7 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
@@ -37,7 +37,7 @@ func (m *MysqlBranchRepository) FindByID(ID uint) *entities.Branch {
 	branch := entities.Branch{
 		ID:     branchDB.ID,
 		Name:   branchDB.Name,
-		Status: valueobjects.Status(branchDB.Status),
+		Status: vo.Status(branchDB.Status),
 	}
 
 	return &branch

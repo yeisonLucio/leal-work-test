@@ -4,7 +4,7 @@ import (
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 )
 
 type CreateStoreUC struct {
@@ -12,15 +12,12 @@ type CreateStoreUC struct {
 }
 
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {
-	var minAmount valueobjects.Amount
-	minAmount.NewFromFloat(createStoreDTO.MinAmount)
-
 	createdStore, err := c.StoreRepository.Create(entities.Store{
 		Name:         createStoreDTO.Name,
-		Status:       valueobjects.ActiveStatus,
+		Status:       vo.ActiveStatus,
 		RewardPoints: createStoreDTO.RewardPoints,
 		RewardCoins:  createStoreDTO.RewardCoins,
-		MinAmount:    minAmount,
+		MinAmount:    vo.NewAmountFromFloat(createStoreDTO.MinAmount),
 	})
 
 	if err != nil {
@@ -32,7 +29,7 @@ func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCr
 		Name:         createdStore.Name,
 		RewardPoints: createdStore.RewardPoints,
 		RewardCoins:  createdStore.RewardCoins,
-		MinAmount:    createdStore.MinAmount.GetValue(),
+		MinAmount:    createdStore.MinAmount.Value(),
 		Status:       string(createdStore.Status),
 	}
 

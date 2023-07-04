@@ -3,7 +3,7 @@ package repositories
 import (
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
-	"lucio.com/order-service/src/domain/valueobjects"
+	"lucio.com/order-service/src/domain/vo"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
@@ -36,7 +36,7 @@ func (m *MysqlCampaignRepository) FindByID(ID uint) *entities.Campaign {
 	Campaign := entities.Campaign{
 		ID:          campaignDB.ID,
 		Description: campaignDB.Description,
-		Status:      valueobjects.Status(campaignDB.Status),
+		Status:      vo.Status(campaignDB.Status),
 	}
 
 	return &Campaign
