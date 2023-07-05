@@ -173,6 +173,7 @@ func TestCreateTransactionUC_Execute(t *testing.T) {
 					a.createTransactionDTO.BranchID,
 					store.RewardPoints,
 					store.RewardCoins,
+					float64(10000),
 				).Return(uint(0), uint(0)).Once()
 
 				transaction := entities.Transaction{
@@ -226,6 +227,7 @@ func TestCreateTransactionUC_Execute(t *testing.T) {
 					a.createTransactionDTO.BranchID,
 					store.RewardPoints,
 					store.RewardCoins,
+					float64(10000),
 				).Return(uint(0), uint(0)).Once()
 
 				f.TransactionRepository.On("Create", mock.Anything).Return(nil, errors.New("error"))
