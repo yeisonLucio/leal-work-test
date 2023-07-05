@@ -9,23 +9,23 @@ type CalculateCampaignRewardsUC struct {
 	mock.Mock
 }
 
-// Execute provides a mock function with given fields: brachID, storePoints, storeCoins
-func (_m *CalculateCampaignRewardsUC) Execute(brachID uint, storePoints uint, storeCoins uint) (uint, uint) {
-	ret := _m.Called(brachID, storePoints, storeCoins)
+// Execute provides a mock function with given fields: brachID, storePoints, storeCoins, transactionAmount
+func (_m *CalculateCampaignRewardsUC) Execute(brachID uint, storePoints uint, storeCoins uint, transactionAmount float64) (uint, uint) {
+	ret := _m.Called(brachID, storePoints, storeCoins, transactionAmount)
 
 	var r0 uint
 	var r1 uint
-	if rf, ok := ret.Get(0).(func(uint, uint, uint) (uint, uint)); ok {
-		return rf(brachID, storePoints, storeCoins)
+	if rf, ok := ret.Get(0).(func(uint, uint, uint, float64) (uint, uint)); ok {
+		return rf(brachID, storePoints, storeCoins, transactionAmount)
 	}
-	if rf, ok := ret.Get(0).(func(uint, uint, uint) uint); ok {
-		r0 = rf(brachID, storePoints, storeCoins)
+	if rf, ok := ret.Get(0).(func(uint, uint, uint, float64) uint); ok {
+		r0 = rf(brachID, storePoints, storeCoins, transactionAmount)
 	} else {
 		r0 = ret.Get(0).(uint)
 	}
 
-	if rf, ok := ret.Get(1).(func(uint, uint, uint) uint); ok {
-		r1 = rf(brachID, storePoints, storeCoins)
+	if rf, ok := ret.Get(1).(func(uint, uint, uint, float64) uint); ok {
+		r1 = rf(brachID, storePoints, storeCoins, transactionAmount)
 	} else {
 		r1 = ret.Get(1).(uint)
 	}

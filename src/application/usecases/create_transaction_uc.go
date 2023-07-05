@@ -20,26 +20,25 @@ type CreateTransactionUC struct {
 	StoreRepository            repositories.StoreRepository
 	TransactionRepository      repositories.TransactionRepository
 	UserRepository             repositories.UserRepository
-	BranchCampaignRepository   repositories.BranchCampaignRepository
 	CalculateCampaignRewardsUC usecases.CalculateCampaignRewardsUC
 }
 
 func (c *CreateTransactionUC) Execute(
-	createTransactionUC dto.CreateTransactionDTO,
+	createTransactionDTO dto.CreateTransactionDTO,
 ) (*dto.TransactionCreatedDTO, error) {
-	if c.UserRepository.FindByID(createTransactionUC.UserID) == nil {
+	if c.UserRepository.FindByID(createTransactionDTO.UserID) == nil {
 		return nil, errUserDoesNotExist
 	}
 
-	store := c.StoreRepository.FindByBranchID(createTransactionUC.BranchID)
+	store := c.StoreRepository.FindByBranchID(createTransactionDTO.BranchID)
 	if store == nil {
 		return nil, errStoreDoesNotExist
 	}
 
 	transaction := entities.Transaction{
-		UserID:   createTransactionUC.UserID,
-		BranchID: createTransactionUC.BranchID,
-		Amount:   vo.NewAmountFromFloat(createTransactionUC.Amount),
+		UserID:   createTransactionDTO.UserID,
+		BranchID: createTransactionDTO.BranchID,
+		Amount:   vo.NewAmountFromFloat(createTransactionDTO.Amount),
 		Type:     vo.TransactionType(vo.AddType),
 	}
 
@@ -50,7 +49,7 @@ func (c *CreateTransactionUC) Execute(
 		Type:     string(transaction.Type),
 	}
 
-	if createTransactionUC.Amount < store.MinAmount.Value() {
+	if createTransactionDTO.Amount < store.MinAmount.Value() {
 		transactionCreated, err := c.TransactionRepository.Create(transaction)
 		if err != nil {
 			return nil, errTransactionCannotBeCreated
@@ -62,9 +61,10 @@ func (c *CreateTransactionUC) Execute(
 	}
 
 	points, coins := c.CalculateCampaignRewardsUC.Execute(
-		createTransactionUC.BranchID,
+		createTransactionDTO.BranchID,
 		store.RewardPoints,
 		store.RewardCoins,
+		transaction.Amount.Value(),
 	)
 
 	transaction.Points = store.RewardPoints + points

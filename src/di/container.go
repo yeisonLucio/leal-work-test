@@ -94,11 +94,15 @@ func BuildContainer() {
 		UserRepository: userRepository,
 	}
 
-	createTransactionUC := &usecases.CreateTransactionUC{
-		StoreRepository:          storeRepository,
-		TransactionRepository:    transactionRepository,
-		UserRepository:           userRepository,
+	calculateCampaignRewardsUC := &usecases.CalculateCampaignRewardsUC{
 		BranchCampaignRepository: branchCampaignRepository,
+	}
+
+	createTransactionUC := &usecases.CreateTransactionUC{
+		StoreRepository:            storeRepository,
+		TransactionRepository:      transactionRepository,
+		UserRepository:             userRepository,
+		CalculateCampaignRewardsUC: calculateCampaignRewardsUC,
 	}
 
 	//controllers
