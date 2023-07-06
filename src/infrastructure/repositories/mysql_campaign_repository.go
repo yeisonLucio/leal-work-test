@@ -29,7 +29,8 @@ func (m *MysqlCampaignRepository) Create(Campaign entities.Campaign) (*entities.
 func (m *MysqlCampaignRepository) FindByID(ID uint) *entities.Campaign {
 	var campaignDB models.Campaign
 
-	if result := m.DB.Find(&campaignDB, ID); result.RowsAffected == 0 {
+	result := m.DB.Where("status=?", vo.ActiveStatus).Find(&campaignDB, ID)
+	if result.RowsAffected == 0 {
 		return nil
 	}
 

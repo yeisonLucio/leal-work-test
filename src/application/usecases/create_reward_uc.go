@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"errors"
-
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -16,7 +14,7 @@ type CreateRewardUC struct {
 
 func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.RewardCreatedDTO, error) {
 	if store := c.StoreRepository.FindByID(createRewardDTO.StoreID); store == nil {
-		return nil, errors.New("la tienda ingresada no existe")
+		return nil, errStoreNotFound
 	}
 
 	amountType, err := vo.NewAmountType(createRewardDTO.AmountType)

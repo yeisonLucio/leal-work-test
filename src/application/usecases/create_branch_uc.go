@@ -9,15 +9,21 @@ import (
 	"lucio.com/order-service/src/domain/vo"
 )
 
+var (
+	errStoreNotFound = errors.New("tienda no encontrada")
+)
+
 type CreateBranchUC struct {
 	BranchRepository repositories.BranchRepository
 	StoreRepository  repositories.StoreRepository
 }
 
-func (c *CreateBranchUC) Execute(createBranchDTO dto.CreateBranchDTO) (*dto.BranchCreatedDTO, error) {
+func (c *CreateBranchUC) Execute(
+	createBranchDTO dto.CreateBranchDTO,
+) (*dto.BranchCreatedDTO, error) {
 
 	if store := c.StoreRepository.FindByID(createBranchDTO.StoreID); store == nil {
-		return nil, errors.New("la tienda no existe")
+		return nil, errStoreNotFound
 	}
 
 	branch := entities.Branch{
@@ -39,5 +45,4 @@ func (c *CreateBranchUC) Execute(createBranchDTO dto.CreateBranchDTO) (*dto.Bran
 	}
 
 	return &response, nil
-
 }
