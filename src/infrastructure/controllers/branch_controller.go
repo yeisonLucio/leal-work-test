@@ -23,7 +23,7 @@ type BranchController struct {
 // @Produce json
 // @Param store_id path int true "Store ID"
 // @Param body body dto.CreateBranchDTO true "Body data"
-// @Success 200 {object} dto.BranchCreatedDTO
+// @Success 201 {object} dto.BranchCreatedDTO
 // @Router /stores/{store_id}/branches [post]
 func (b *BranchController) Create(ctx *gin.Context) {
 	var createBranchDTO dto.CreateBranchDTO
@@ -36,19 +36,12 @@ func (b *BranchController) Create(ctx *gin.Context) {
 		return
 	}
 
-	param, found := ctx.Params.Get("store_id")
-	if !found {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "el parámetro store_id es requerido",
-			"id":    "bad_request_error",
-		})
-		return
-	}
+	param := ctx.Param("store_id")
 
 	storeID, err := strconv.Atoi(param)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "el parámetro store_id debe ser un un numero entero",
+			"error": "el parámetro store_id debe ser un numero entero",
 			"id":    "bad_request_error",
 		})
 		return
@@ -78,7 +71,7 @@ func (b *BranchController) Create(ctx *gin.Context) {
 // @Param campaign_id path int true "Campaign ID"
 // @Param branch_id path int true  "Branch ID"
 // @Param body body dto.CreateBranchCampaignDTO true "Body data"
-// @Success 200 {object} dto.BranchCampaignCreatedDTO
+// @Success 201 {object} dto.BranchCampaignCreatedDTO
 // @Router /campaigns/{campaign_id}/branches/{branch_id} [post]
 func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
 	var createBranchCampaignDTO dto.CreateBranchCampaignDTO
@@ -139,7 +132,7 @@ func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
 // @Param campaign_id path int true "Campaign ID"
 // @Param store_id path int true "Store ID"
 // @Param body body dto.CreateStoreCampaignDTO true "Body data"
-// @Success 200 {object} dto.StoreCampaignCreatedDTO
+// @Success 201 {object} dto.StoreCampaignCreatedDTO
 // @Router /campaigns/{campaign_id}/stores/{store_id} [post]
 func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 	var createStoreCampaignDTO dto.CreateStoreCampaignDTO
@@ -187,7 +180,7 @@ func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusCreated, gin.H{
 		"data": result,
 	})
 }

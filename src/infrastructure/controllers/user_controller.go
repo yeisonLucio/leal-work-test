@@ -20,7 +20,7 @@ type UserController struct {
 // @Accept json
 // @Produce json
 // @Param body body dto.CreateUserDTO true "Body data"
-// @Success 200 {object} dto.UserCreatedDTO
+// @Success 201 {object} dto.UserCreatedDTO
 // @Router /users [post]
 func (u *UserController) Create(ctx *gin.Context) {
 	var createUserDTO dto.CreateUserDTO
@@ -54,7 +54,7 @@ func (u *UserController) Create(ctx *gin.Context) {
 // @param user_id path int true "User ID"
 // @param branch_id path int true "Branch ID"
 // @Param body body dto.CreateTransactionDTO true "Body data"
-// @Success 200 {object} dto.TransactionCreatedDTO
+// @Success 201 {object} dto.TransactionCreatedDTO
 // @Router /users/{user_id}/transactions/branches/{branch_id} [post]
 func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 	var createTransactionDTO dto.CreateTransactionDTO

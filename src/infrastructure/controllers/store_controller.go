@@ -18,7 +18,7 @@ type StoreController struct {
 // @Accept json
 // @Produce json
 // @Param body body dto.CreateStoreDTO true "Body data"
-// @Success 200 {object} dto.StoreCreatedDTO
+// @Success 201 {object} dto.StoreCreatedDTO
 // @Router /stores [post]
 func (s *StoreController) Create(ctx *gin.Context) {
 	var createStoreDTO dto.CreateStoreDTO

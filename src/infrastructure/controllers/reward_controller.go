@@ -20,7 +20,7 @@ type RewardController struct {
 // @Produce json
 // @Param store_id path int true "Store ID"
 // @Param body body dto.CreateRewardDTO true "Body data"
-// @Success 200 {object} dto.RewardCreatedDTO
+// @Success 201 {object} dto.RewardCreatedDTO
 // @Router /stores/{store_id}/rewards [post]
 func (s *RewardController) Create(ctx *gin.Context) {
 	var createRewardDTO dto.CreateRewardDTO

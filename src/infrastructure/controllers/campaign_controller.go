@@ -18,7 +18,7 @@ type CampaignController struct {
 // @Accept json
 // @Produce json
 // @Param body body dto.CreateCampaignDTO true "Body data"
-// @Success 200 {object} dto.CampaignCreatedDTO
+// @Success 201 {object} dto.CampaignCreatedDTO
 // @Router /campaigns [post]
 func (s *CampaignController) Create(ctx *gin.Context) {
 	var createCampaignDTO dto.CreateCampaignDTO
