@@ -41,9 +41,7 @@ func (u *UserController) Create(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": user,
-	})
+	ctx.JSON(http.StatusCreated, user)
 }
 
 // @Summary Servicio para crear transacciones de un usuario
@@ -100,7 +98,5 @@ func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": transaction,
-	})
+	ctx.JSON(http.StatusCreated, transaction)
 }

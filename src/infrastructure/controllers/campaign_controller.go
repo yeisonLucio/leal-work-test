@@ -39,7 +39,5 @@ func (s *CampaignController) Create(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": campaignCreated,
-	})
+	ctx.JSON(http.StatusCreated, campaignCreated)
 }

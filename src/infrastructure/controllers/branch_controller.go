@@ -58,9 +58,7 @@ func (b *BranchController) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": branchCreated,
-	})
+	ctx.JSON(http.StatusCreated, branchCreated)
 }
 
 // @Summary Servicio para asociar una campaña a una sucursal
@@ -119,9 +117,7 @@ func (b *BranchController) CreateBranchCampaign(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": result,
-	})
+	ctx.JSON(http.StatusCreated, result)
 }
 
 // @Summary Servicio para asociar una campaña a todas las sucursales de una tienda
@@ -180,9 +176,7 @@ func (b *BranchController) AddCampaignToBranches(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": result,
-	})
+	ctx.JSON(http.StatusCreated, result)
 }
 
 // @Summary Servicio para obtener las campañas de una sucursal
@@ -207,7 +201,5 @@ func (b *BranchController) GetBranchCampaignsByBranch(ctx *gin.Context) {
 
 	result := b.GetBranchCampaignsUC.Execute(uint(branchID))
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"data": result,
-	})
+	ctx.JSON(http.StatusOK, result)
 }

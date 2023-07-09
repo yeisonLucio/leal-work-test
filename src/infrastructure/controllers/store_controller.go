@@ -39,7 +39,5 @@ func (s *StoreController) Create(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": store,
-	})
+	ctx.JSON(http.StatusCreated, store)
 }

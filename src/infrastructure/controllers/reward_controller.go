@@ -61,7 +61,5 @@ func (s *RewardController) Create(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": rewardCreated,
-	})
+	ctx.JSON(http.StatusCreated, rewardCreated)
 }
