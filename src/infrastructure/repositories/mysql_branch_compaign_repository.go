@@ -23,7 +23,7 @@ func (m *MysqlBranchCampaignRepository) Create(
 		StartDate:     branchCampaign.StartDate,
 		EndDate:       branchCampaign.EndDate,
 		Operator:      branchCampaign.Operator.Value(),
-		OperatorValue: branchCampaign.OperationValue,
+		OperatorValue: branchCampaign.OperatorValue,
 		MinAmount:     branchCampaign.MinAmount.Value(),
 	}
 
@@ -46,14 +46,14 @@ func (m *MysqlBranchCampaignRepository) FindByID(ID uint) *entities.BranchCampai
 	operator, _ := vo.NewOperator(branchDB.Operator)
 
 	branchCampaign := entities.BranchCampaign{
-		ID:             branchDB.ID,
-		CampaignID:     branchDB.CampaignID,
-		BranchID:       branchDB.BranchID,
-		StartDate:      branchDB.StartDate,
-		EndDate:        branchDB.EndDate,
-		Operator:       operator,
-		OperationValue: branchDB.OperatorValue,
-		MinAmount:      vo.NewAmountFromFloat(branchDB.MinAmount),
+		ID:            branchDB.ID,
+		CampaignID:    branchDB.CampaignID,
+		BranchID:      branchDB.BranchID,
+		StartDate:     branchDB.StartDate,
+		EndDate:       branchDB.EndDate,
+		Operator:      operator,
+		OperatorValue: branchDB.OperatorValue,
+		MinAmount:     vo.NewAmountFromFloat(branchDB.MinAmount),
 	}
 
 	return &branchCampaign

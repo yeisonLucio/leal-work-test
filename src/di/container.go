@@ -2,7 +2,8 @@ package di
 
 import (
 	"lucio.com/order-service/src/application/usecases"
-	"lucio.com/order-service/src/database"
+	"lucio.com/order-service/src/config/database"
+	"lucio.com/order-service/src/config/redis"
 	"lucio.com/order-service/src/infrastructure/controllers"
 	"lucio.com/order-service/src/infrastructure/repositories"
 )
@@ -41,7 +42,7 @@ func BuildContainer() {
 	}
 
 	cacheRepository := &repositories.RedisRepository{
-		RedisClient: database.RedisClient,
+		RedisClient: redis.RedisClient,
 	}
 
 	userRepository := &repositories.MysqlUserRepository{

@@ -13,14 +13,14 @@ var (
 )
 
 type BranchCampaign struct {
-	ID             uint
-	CampaignID     uint
-	BranchID       uint
-	StartDate      time.Time
-	EndDate        time.Time
-	Operator       vo.Operator
-	OperationValue uint
-	MinAmount      vo.Amount
+	ID            uint
+	CampaignID    uint
+	BranchID      uint
+	StartDate     time.Time
+	EndDate       time.Time
+	Operator      vo.Operator
+	OperatorValue uint
+	MinAmount     vo.Amount
 }
 
 func (b *BranchCampaign) SetStartDate(date string) error {

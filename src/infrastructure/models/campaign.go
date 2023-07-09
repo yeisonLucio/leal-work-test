@@ -7,6 +7,6 @@ import (
 type Campaign struct {
 	gorm.Model
 	Description     string `gorm:"not null"`
-	Status          string `gorm:"type:enum('active','inactive');default:active"`
+	Status          string `gorm:"default:'active'"`
 	BranchCampaigns []BranchCampaign
 }

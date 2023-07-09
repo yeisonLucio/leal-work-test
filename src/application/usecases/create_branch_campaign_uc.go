@@ -33,10 +33,10 @@ func (c *CreateBranchCampaignUC) Execute(
 	}
 
 	branchCampaign := entities.BranchCampaign{
-		CampaignID:     createBranchCampaignDTO.CampaignID,
-		BranchID:       createBranchCampaignDTO.BranchID,
-		OperationValue: createBranchCampaignDTO.OperatorValue,
-		MinAmount:      vo.NewAmountFromFloat(createBranchCampaignDTO.MinAmount),
+		CampaignID:    createBranchCampaignDTO.CampaignID,
+		BranchID:      createBranchCampaignDTO.BranchID,
+		OperatorValue: createBranchCampaignDTO.OperatorValue,
+		MinAmount:     vo.NewAmountFromFloat(createBranchCampaignDTO.MinAmount),
 	}
 
 	if err := branchCampaign.SetStartDate(createBranchCampaignDTO.StartDate); err != nil {
@@ -63,7 +63,7 @@ func (c *CreateBranchCampaignUC) Execute(
 		StartDate:     createdBranchCampaign.StartDate.String(),
 		EndDate:       createdBranchCampaign.EndDate.String(),
 		Operator:      createdBranchCampaign.Operator.Value(),
-		OperatorValue: createdBranchCampaign.OperationValue,
+		OperatorValue: createdBranchCampaign.OperatorValue,
 		MinAmount:     createdBranchCampaign.MinAmount.Value(),
 	}
 

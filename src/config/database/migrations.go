@@ -1,9 +1,12 @@
 package database
 
-import "lucio.com/order-service/src/infrastructure/models"
+import (
+	"gorm.io/gorm"
+	"lucio.com/order-service/src/infrastructure/models"
+)
 
-func RunMigrations() error {
-	return DB.AutoMigrate(
+func RunMigrations(db *gorm.DB) error {
+	return db.AutoMigrate(
 		&models.User{},
 		&models.Store{},
 		&models.Branch{},

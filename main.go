@@ -5,7 +5,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"lucio.com/order-service/src"
-	"lucio.com/order-service/src/database"
+	"lucio.com/order-service/src/config/database"
+	"lucio.com/order-service/src/config/redis"
 	"lucio.com/order-service/src/di"
 )
 
@@ -18,11 +19,11 @@ func main() {
 		panic(err)
 	}
 
-	if err := database.RunMigrations(); err != nil {
+	if err := database.RunMigrations(database.DB); err != nil {
 		fmt.Println("error corriendo las migraciones")
 	}
 
-	database.ConnectRedis()
+	redis.ConnectRedis()
 
 	di.BuildContainer()
 

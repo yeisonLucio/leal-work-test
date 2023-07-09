@@ -9,5 +9,5 @@ type Transaction struct {
 	Amount   float64 `gorm:"not null"`
 	Points   uint
 	Coins    uint
-	Type     string `gorm:"type:enum('add','subtract');not null"`
+	Type     string `gorm:"not null"`
 }

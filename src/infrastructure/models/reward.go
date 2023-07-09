@@ -8,6 +8,6 @@ type Reward struct {
 	Reward      string  `gorm:"not null"`
 	MinAmount   float64 `gorm:"not null"`
 	Description string  `gorm:"not null"`
-	AmountType  string  `gorm:"type:enum('coins','points');not null"`
-	Status      string  `gorm:"type:enum('active','inactive');default:active"`
+	AmountType  string  `gorm:"not null"`
+	Status      string  `gorm:"default:active"`
 }
