@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"github.com/sirupsen/logrus"
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -9,9 +10,16 @@ import (
 
 type CreateStoreUC struct {
 	StoreRepository repositories.StoreRepository
+	Logger          *logrus.Entry
 }
 
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {
+	log := c.Logger.WithFields(logrus.Fields{
+		"file":           "create_store_uc",
+		"method":         "Execute",
+		"createStoreDTO": createStoreDTO,
+	})
+
 	createdStore, err := c.StoreRepository.Create(entities.Store{
 		Name:         createStoreDTO.Name,
 		Status:       vo.ActiveStatus,
@@ -21,6 +29,7 @@ func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCr
 	})
 
 	if err != nil {
+		log.WithError(err).Error("Error creating store")
 		return nil, err
 	}
 

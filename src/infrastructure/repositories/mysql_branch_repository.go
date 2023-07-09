@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
 	"lucio.com/order-service/src/domain/vo"
@@ -8,10 +9,17 @@ import (
 )
 
 type MysqlBranchRepository struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	Logger *logrus.Entry
 }
 
 func (m *MysqlBranchRepository) Create(branch entities.Branch) (*entities.Branch, error) {
+	log := m.Logger.WithFields(logrus.Fields{
+		"file":   "mysql_branch_repository",
+		"method": "Create",
+		"branch": branch,
+	})
+
 	branchDB := models.Branch{
 		Name:    branch.Name,
 		Status:  string(branch.Status),
@@ -19,6 +27,7 @@ func (m *MysqlBranchRepository) Create(branch entities.Branch) (*entities.Branch
 	}
 
 	if result := m.DB.Create(&branchDB); result.Error != nil {
+		log.WithError(result.Error).Error("error creating a branch")
 		return nil, result.Error
 	}
 

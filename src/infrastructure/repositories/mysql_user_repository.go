@@ -1,29 +1,38 @@
 package repositories
 
 import (
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
 	"lucio.com/order-service/src/infrastructure/models"
 )
 
 type MysqlUserRepository struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	Logger *logrus.Entry
 }
 
-func (m *MysqlUserRepository) Create(User entities.User) (*entities.User, error) {
+func (m *MysqlUserRepository) Create(user entities.User) (*entities.User, error) {
+	log := m.Logger.WithFields(logrus.Fields{
+		"file":   "mysql_user_repository",
+		"method": "Create",
+		"user":   user,
+	})
+
 	userDB := models.User{
-		Name:           User.Name,
-		Status:         string(User.Status),
-		Identification: User.Identification,
+		Name:           user.Name,
+		Status:         string(user.Status),
+		Identification: user.Identification,
 	}
 
 	if result := m.DB.Create(&userDB); result.Error != nil {
+		log.WithError(result.Error).Error("error creating user")
 		return nil, result.Error
 	}
 
-	User.ID = userDB.ID
+	user.ID = userDB.ID
 
-	return &User, nil
+	return &user, nil
 }
 
 func (m *MysqlUserRepository) FindByID(ID uint) *entities.User {

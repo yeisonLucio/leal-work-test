@@ -3,6 +3,7 @@ package repositories
 import (
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -11,12 +12,19 @@ import (
 )
 
 type MysqlBranchCampaignRepository struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	Logger *logrus.Entry
 }
 
 func (m *MysqlBranchCampaignRepository) Create(
 	branchCampaign entities.BranchCampaign,
 ) (*entities.BranchCampaign, error) {
+	log := m.Logger.WithFields(logrus.Fields{
+		"file":           "mysql_branch_campaign_repository",
+		"method":         "Create",
+		"branchCampaign": branchCampaign,
+	})
+
 	branchDB := models.BranchCampaign{
 		BranchID:      branchCampaign.BranchID,
 		CampaignID:    branchCampaign.CampaignID,
@@ -28,6 +36,7 @@ func (m *MysqlBranchCampaignRepository) Create(
 	}
 
 	if result := m.DB.Create(&branchDB); result.Error != nil {
+		log.WithError(result.Error).Error("error creating branchCampaign")
 		return nil, result.Error
 	}
 

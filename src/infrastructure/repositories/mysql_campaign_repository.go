@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
 	"lucio.com/order-service/src/domain/vo"
@@ -8,22 +9,30 @@ import (
 )
 
 type MysqlCampaignRepository struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	Logger *logrus.Entry
 }
 
-func (m *MysqlCampaignRepository) Create(Campaign entities.Campaign) (*entities.Campaign, error) {
+func (m *MysqlCampaignRepository) Create(campaign entities.Campaign) (*entities.Campaign, error) {
+	log := m.Logger.WithFields(logrus.Fields{
+		"file":     "mysql_campaign_repository",
+		"method":   "Create",
+		"campaign": campaign,
+	})
+
 	campaignDB := models.Campaign{
-		Description: Campaign.Description,
-		Status:      string(Campaign.Status),
+		Description: campaign.Description,
+		Status:      string(campaign.Status),
 	}
 
 	if result := m.DB.Create(&campaignDB); result.Error != nil {
+		log.WithError(result.Error).Error("error creating a campaign")
 		return nil, result.Error
 	}
 
-	Campaign.ID = campaignDB.ID
+	campaign.ID = campaignDB.ID
 
-	return &Campaign, nil
+	return &campaign, nil
 }
 
 func (m *MysqlCampaignRepository) FindByID(ID uint) *entities.Campaign {

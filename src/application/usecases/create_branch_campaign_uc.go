@@ -3,6 +3,7 @@ package usecases
 import (
 	"errors"
 
+	"github.com/sirupsen/logrus"
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -18,17 +19,26 @@ type CreateBranchCampaignUC struct {
 	BranchRepository         repositories.BranchRepository
 	CampaignRepository       repositories.CampaignRepository
 	BranchCampaignRepository repositories.BranchCampaignRepository
+	Logger                   *logrus.Entry
 }
 
 func (c *CreateBranchCampaignUC) Execute(
 	createBranchCampaignDTO dto.CreateBranchCampaignDTO,
 ) (*dto.BranchCampaignCreatedDTO, error) {
 
+	log := c.Logger.WithFields(logrus.Fields{
+		"file":                    "create_branch_campaign_uc",
+		"method":                  "Execute",
+		"createBranchCampaignDTO": createBranchCampaignDTO,
+	})
+
 	if campaign := c.CampaignRepository.FindByID(createBranchCampaignDTO.CampaignID); campaign == nil {
+		log.WithError(errCampaignNotFound).Error("campaign not found")
 		return nil, errCampaignNotFound
 	}
 
 	if branch := c.BranchRepository.FindByID(createBranchCampaignDTO.BranchID); branch == nil {
+		log.WithError(errBranchNotFound).Error("branch not found")
 		return nil, errBranchNotFound
 	}
 
@@ -40,19 +50,23 @@ func (c *CreateBranchCampaignUC) Execute(
 	}
 
 	if err := branchCampaign.SetStartDate(createBranchCampaignDTO.StartDate); err != nil {
+		log.WithError(err).Error("start date not valid")
 		return nil, err
 	}
 
 	if err := branchCampaign.SetEndDate(createBranchCampaignDTO.EndDate); err != nil {
+		log.WithError(err).Error("end date not valid")
 		return nil, err
 	}
 
 	if err := branchCampaign.SetOperator(createBranchCampaignDTO.Operator); err != nil {
+		log.WithError(err).Error("operator not valid")
 		return nil, err
 	}
 
 	createdBranchCampaign, err := c.BranchCampaignRepository.Create(branchCampaign)
 	if err != nil {
+		log.WithError(err).Error("error creating branch campaign")
 		return nil, err
 	}
 

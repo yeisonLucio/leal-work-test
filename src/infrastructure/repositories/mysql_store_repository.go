@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"lucio.com/order-service/src/domain/entities"
 	"lucio.com/order-service/src/domain/vo"
@@ -8,10 +9,17 @@ import (
 )
 
 type MysqlStoreRepository struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	Logger *logrus.Entry
 }
 
 func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, error) {
+	log := m.Logger.WithFields(logrus.Fields{
+		"file":   "mysql_store_repository",
+		"method": "Create",
+		"store":  store,
+	})
+
 	storeDB := models.Store{
 		Name:         store.Name,
 		Status:       string(store.Status),
@@ -21,6 +29,7 @@ func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, er
 	}
 
 	if result := m.DB.Create(&storeDB); result.Error != nil {
+		log.WithError(result.Error).Error("error creating store")
 		return nil, result.Error
 	}
 

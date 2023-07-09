@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"github.com/sirupsen/logrus"
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/dto"
 	"lucio.com/order-service/src/domain/entities"
@@ -10,15 +11,24 @@ import (
 type CreateRewardUC struct {
 	RewardRepository repositories.RewardRepository
 	StoreRepository  repositories.StoreRepository
+	Logger           *logrus.Entry
 }
 
 func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.RewardCreatedDTO, error) {
+	log := c.Logger.WithFields(logrus.Fields{
+		"file":            "create_reward_uc",
+		"method":          "Execute",
+		"createRewardDTO": createRewardDTO,
+	})
+
 	if store := c.StoreRepository.FindByID(createRewardDTO.StoreID); store == nil {
+		log.Error(errStoreNotFound)
 		return nil, errStoreNotFound
 	}
 
 	amountType, err := vo.NewAmountType(createRewardDTO.AmountType)
 	if err != nil {
+		log.WithError(err).Error("amount type invalid")
 		return nil, err
 	}
 
@@ -32,6 +42,7 @@ func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.Rewa
 	})
 
 	if err != nil {
+		log.WithError(err).Error("error creating reward")
 		return nil, err
 	}
 

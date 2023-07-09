@@ -3,6 +3,7 @@ package usecases
 import (
 	"errors"
 
+	"github.com/sirupsen/logrus"
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/contracts/usecases"
 	"lucio.com/order-service/src/domain/dto"
@@ -21,17 +22,26 @@ type CreateTransactionUC struct {
 	TransactionRepository      repositories.TransactionRepository
 	UserRepository             repositories.UserRepository
 	CalculateCampaignRewardsUC usecases.CalculateCampaignRewardsUC
+	Logger                     *logrus.Entry
 }
 
 func (c *CreateTransactionUC) Execute(
 	createTransactionDTO dto.CreateTransactionDTO,
 ) (*dto.TransactionCreatedDTO, error) {
+	log := c.Logger.WithFields(logrus.Fields{
+		"file":                 "create_transaction_uc",
+		"method":               "Execute",
+		"createTransactionDTO": createTransactionDTO,
+	})
+
 	if c.UserRepository.FindByID(createTransactionDTO.UserID) == nil {
+		log.Error(errUserDoesNotExist)
 		return nil, errUserDoesNotExist
 	}
 
 	store := c.StoreRepository.FindByBranchID(createTransactionDTO.BranchID)
 	if store == nil {
+		log.Error(errStoreDoesNotExist)
 		return nil, errStoreDoesNotExist
 	}
 
@@ -52,6 +62,7 @@ func (c *CreateTransactionUC) Execute(
 	if createTransactionDTO.Amount < store.MinAmount.Value() {
 		transactionCreated, err := c.TransactionRepository.Create(transaction)
 		if err != nil {
+			log.Error(errTransactionCannotBeCreated)
 			return nil, errTransactionCannotBeCreated
 		}
 
@@ -72,6 +83,7 @@ func (c *CreateTransactionUC) Execute(
 
 	transactionCreated, err := c.TransactionRepository.Create(transaction)
 	if err != nil {
+		log.Error(errTransactionCannotBeCreated)
 		return nil, errTransactionCannotBeCreated
 	}
 

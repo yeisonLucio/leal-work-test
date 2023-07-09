@@ -1,9 +1,9 @@
 package usecases
 
 import (
-	"errors"
 	"sync"
 
+	"github.com/sirupsen/logrus"
 	"lucio.com/order-service/src/domain/contracts/repositories"
 	"lucio.com/order-service/src/domain/contracts/usecases"
 	"lucio.com/order-service/src/domain/dto"
@@ -14,6 +14,7 @@ type AddCampaignToStoreUC struct {
 	CreateBranchCampaignUC usecases.CreateBranchCampaignUC
 	CampaignRepository     repositories.CampaignRepository
 	StoreRepository        repositories.StoreRepository
+	Logger                 *logrus.Entry
 }
 
 type resultProcess struct {
@@ -25,12 +26,20 @@ type resultProcess struct {
 func (a *AddCampaignToStoreUC) Execute(
 	createStoreCampaignDTO dto.CreateStoreCampaignDTO,
 ) (*dto.StoreCampaignCreatedDTO, error) {
+	log := a.Logger.WithFields(logrus.Fields{
+		"file":                   "add_campaign_to_uc",
+		"method":                 "Execute",
+		"createStoreCampaignDTO": createStoreCampaignDTO,
+	})
+
 	if campaign := a.CampaignRepository.FindByID(createStoreCampaignDTO.CampaignID); campaign == nil {
-		return nil, errors.New("la campaña no existe")
+		log.Error(errCampaignNotFound)
+		return nil, errCampaignNotFound
 	}
 
 	if store := a.StoreRepository.FindByID(createStoreCampaignDTO.StoreID); store == nil {
-		return nil, errors.New("la tienda no existe")
+		log.Error(errStoreNotFound)
+		return nil, errStoreNotFound
 	}
 
 	branchIds := a.BranchRepository.GetIdsByStoreID(createStoreCampaignDTO.StoreID)
