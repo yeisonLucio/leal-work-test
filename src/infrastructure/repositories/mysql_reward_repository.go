@@ -10,7 +10,7 @@ import (
 
 type MysqlRewardRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlRewardRepository) Create(reward entities.Reward) (*entities.Reward, error) {

@@ -9,7 +9,7 @@ import (
 
 type MysqlUserRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlUserRepository) Create(user entities.User) (*entities.User, error) {

@@ -8,13 +8,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const expiration = time.Minute * 5
+const expiration = time.Minute * 2
 
 var ctx = context.Background()
 
 type RedisRepository struct {
 	RedisClient *redis.Client
-	Logger      *logrus.Entry
+	Logger      *logrus.Logger
 }
 
 func (r *RedisRepository) SetByKey(key string, object string) error {
@@ -42,7 +42,7 @@ func (r *RedisRepository) GetByKey(key string) (string, error) {
 
 	result, err := r.RedisClient.Get(ctx, key).Result()
 	if err != nil {
-		log.WithError(err).Error("error get key")
+		log.WithError(err).Warn("error get key")
 		return "", err
 	}
 

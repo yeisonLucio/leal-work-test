@@ -10,7 +10,7 @@ import (
 
 type CreateStoreUC struct {
 	StoreRepository repositories.StoreRepository
-	Logger          *logrus.Entry
+	Logger          *logrus.Logger
 }
 
 func (c *CreateStoreUC) Execute(createStoreDTO dto.CreateStoreDTO) (*dto.StoreCreatedDTO, error) {

@@ -19,7 +19,7 @@ type CreateBranchCampaignUC struct {
 	BranchRepository         repositories.BranchRepository
 	CampaignRepository       repositories.CampaignRepository
 	BranchCampaignRepository repositories.BranchCampaignRepository
-	Logger                   *logrus.Entry
+	Logger                   *logrus.Logger
 }
 
 func (c *CreateBranchCampaignUC) Execute(

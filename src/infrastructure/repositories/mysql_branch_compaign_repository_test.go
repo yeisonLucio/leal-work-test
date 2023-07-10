@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"lucio.com/order-service/src/config/database"
 	"lucio.com/order-service/src/domain/entities"
@@ -27,8 +28,11 @@ func TestMysqlBranchCampaignRepository_Create(t *testing.T) {
 		MinAmount:     amount,
 	}
 
+	logger := logrus.New()
+
 	repo := MysqlBranchCampaignRepository{
-		DB: db,
+		DB:     db,
+		Logger: logger,
 	}
 
 	result, err := repo.Create(branchCampaign)

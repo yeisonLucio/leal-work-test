@@ -14,7 +14,7 @@ type AddCampaignToStoreUC struct {
 	CreateBranchCampaignUC usecases.CreateBranchCampaignUC
 	CampaignRepository     repositories.CampaignRepository
 	StoreRepository        repositories.StoreRepository
-	Logger                 *logrus.Entry
+	Logger                 *logrus.Logger
 }
 
 type resultProcess struct {

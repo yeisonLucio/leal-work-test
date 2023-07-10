@@ -10,7 +10,7 @@ import (
 
 type CreateUserUC struct {
 	UserRepository repositories.UserRepository
-	Logger         *logrus.Entry
+	Logger         *logrus.Logger
 }
 
 func (c *CreateUserUC) Execute(createUserDTO dto.CreateUserDTO) (*dto.UserCreatedDTO, error) {

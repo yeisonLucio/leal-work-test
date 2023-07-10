@@ -22,7 +22,7 @@ type CreateTransactionUC struct {
 	TransactionRepository      repositories.TransactionRepository
 	UserRepository             repositories.UserRepository
 	CalculateCampaignRewardsUC usecases.CalculateCampaignRewardsUC
-	Logger                     *logrus.Entry
+	Logger                     *logrus.Logger
 }
 
 func (c *CreateTransactionUC) Execute(

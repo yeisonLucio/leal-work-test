@@ -17,7 +17,7 @@ var (
 type CreateBranchUC struct {
 	BranchRepository repositories.BranchRepository
 	StoreRepository  repositories.StoreRepository
-	Logger           *logrus.Entry
+	Logger           *logrus.Logger
 }
 
 func (c *CreateBranchUC) Execute(

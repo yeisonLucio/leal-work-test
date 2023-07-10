@@ -10,7 +10,7 @@ import (
 
 type MysqlStoreRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlStoreRepository) Create(store entities.Store) (*entities.Store, error) {

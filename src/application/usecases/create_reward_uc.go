@@ -11,7 +11,7 @@ import (
 type CreateRewardUC struct {
 	RewardRepository repositories.RewardRepository
 	StoreRepository  repositories.StoreRepository
-	Logger           *logrus.Entry
+	Logger           *logrus.Logger
 }
 
 func (c *CreateRewardUC) Execute(createRewardDTO dto.CreateRewardDTO) (*dto.RewardCreatedDTO, error) {

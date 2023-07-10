@@ -13,7 +13,7 @@ import (
 
 type MysqlBranchCampaignRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlBranchCampaignRepository) Create(

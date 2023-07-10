@@ -21,23 +21,25 @@ type UserController struct {
 // @Produce json
 // @Param body body dto.CreateUserDTO true "Body data"
 // @Success 201 {object} dto.UserCreatedDTO
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
 // @Router /users [post]
 func (u *UserController) Create(ctx *gin.Context) {
 	var createUserDTO dto.CreateUserDTO
 
 	if err := ctx.ShouldBindJSON(&createUserDTO); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-			"id":    "bad_request",
+		ctx.JSON(http.StatusBadRequest, errorResponse{
+			Message: err.Error(),
+			ID:      "bad_request",
 		})
 		return
 	}
 
 	user, err := u.CreateUserUC.Execute(createUserDTO)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-			"id":    "unexpected_error",
+		ctx.JSON(http.StatusInternalServerError, errorResponse{
+			Message: err.Error(),
+			ID:      "unexpected_error",
 		})
 	}
 
@@ -53,14 +55,16 @@ func (u *UserController) Create(ctx *gin.Context) {
 // @param branch_id path int true "Branch ID"
 // @Param body body dto.CreateTransactionDTO true "Body data"
 // @Success 201 {object} dto.TransactionCreatedDTO
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
 // @Router /users/{user_id}/transactions/branches/{branch_id} [post]
 func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 	var createTransactionDTO dto.CreateTransactionDTO
 
 	if err := ctx.ShouldBindJSON(&createTransactionDTO); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-			"id":    "bad_request",
+		ctx.JSON(http.StatusBadRequest, errorResponse{
+			Message: err.Error(),
+			ID:      "bad_request",
 		})
 		return
 	}
@@ -69,9 +73,9 @@ func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 
 	userID, err := strconv.Atoi(paramUserID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "el parámetro user_id debe ser un un numero entero",
-			"id":    "bad_request_error",
+		ctx.JSON(http.StatusBadRequest, errorResponse{
+			Message: "el parámetro user_id debe ser un un numero entero",
+			ID:      "bad_request_error",
 		})
 		return
 	}
@@ -80,9 +84,9 @@ func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 
 	branchID, err := strconv.Atoi(paramBranchID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "el parámetro branch_id debe ser un un numero entero",
-			"id":    "bad_request_error",
+		ctx.JSON(http.StatusBadRequest, errorResponse{
+			Message: "el parámetro branch_id debe ser un un numero entero",
+			ID:      "bad_request_error",
 		})
 		return
 	}
@@ -92,9 +96,9 @@ func (u *UserController) RegisterTransaction(ctx *gin.Context) {
 
 	transaction, err := u.CreateTransactionUC.Execute(createTransactionDTO)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-			"id":    "unexpected_error",
+		ctx.JSON(http.StatusInternalServerError, errorResponse{
+			Message: err.Error(),
+			ID:      "unexpected_error",
 		})
 	}
 

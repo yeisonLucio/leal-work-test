@@ -10,7 +10,7 @@ import (
 
 type CreateCampaignUC struct {
 	CampaignRepository repositories.CampaignRepository
-	Logger             *logrus.Entry
+	Logger             *logrus.Logger
 }
 
 func (c *CreateCampaignUC) Execute(createCampaignDTO dto.CreateCampaignDTO) (*dto.CampaignCreatedDTO, error) {

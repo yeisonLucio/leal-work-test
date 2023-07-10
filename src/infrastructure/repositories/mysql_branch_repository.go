@@ -10,7 +10,7 @@ import (
 
 type MysqlBranchRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlBranchRepository) Create(branch entities.Branch) (*entities.Branch, error) {

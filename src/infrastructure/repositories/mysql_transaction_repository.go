@@ -9,7 +9,7 @@ import (
 
 type MysqlTransactionRepository struct {
 	DB     *gorm.DB
-	Logger *logrus.Entry
+	Logger *logrus.Logger
 }
 
 func (m *MysqlTransactionRepository) Create(
